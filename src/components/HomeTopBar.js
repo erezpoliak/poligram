@@ -6,11 +6,14 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import HomeIcon from "@material-ui/icons/Home";
 import CameraBtn from "./CameraBtn";
 import AccountMenu from "./AccountMenu";
+import { Link } from "react-router-dom";
 
 const HomeTopBar = () => {
   return (
     <Container>
-      <Title>Poligram</Title>
+      <HomeLink to="/home">
+        <Title>Poligram</Title>
+      </HomeLink>
       <FlexWrapper>
         <AutoCompleteSearch />
       </FlexWrapper>
@@ -18,7 +21,7 @@ const HomeTopBar = () => {
         <CameraWrapper>
           <CameraBtn size="large" />
         </CameraWrapper>
-        <HomeWrapper>
+        <HomeWrapper to="/home">
           <HomeIcon size="large" />
         </HomeWrapper>
         <NotificationWrapper>
@@ -40,9 +43,9 @@ const Container = styled.div`
   grid-template-columns: 30% 35% 35%;
   // border: 1px solid black;
   background-color: rgba(0, 0, 0, 0.87);
-  position: sticky;
+  /* position: sticky;
   left: 0;
-  top: 0;
+  top: 0; */
 `;
 
 const Title = styled.h1`
@@ -50,8 +53,8 @@ const Title = styled.h1`
   color: rgba(210, 225, 243, 1);
   display: flex;
   align-items: center;
-  // margin-left: 13%;
-  padding-left: 13%;
+  // margin-left: 97%;
+  /* padding-left: 13%; */
 `;
 
 const FlexWrapper = styled.div`
@@ -73,10 +76,19 @@ const NotificationWrapper = styled.div`
   padding-right: 7%;
 `;
 
-const HomeWrapper = styled.div`
+const HomeWrapper = styled(Link)`
   padding-right: 7%;
+  text-decoration: none;
+  color: rgba(210, 225, 243, 1);
 `;
 
 const CameraWrapper = styled.div`
   padding-right: 7%;
+`;
+
+const HomeLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
 `;

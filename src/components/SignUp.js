@@ -1,21 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import fire from "./config/Fire";
+import { Insta_Context } from "./Context";
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const { set_currentUser } = useContext(Insta_Context);
 
-  const login = async () => {
+  const signUp = async () => {
     try {
-      await fire.auth().signInWithEmailAndPassword(email, password);
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userName: userName,
+          email: email,
+          password: password,
+        }),
+      };
+      const response = await fetch(
+        "http://localhost:8080/users/",
+        requestOptions
+      );
+      const result = await response.json();
+      set_currentUser(result);
+    } catch (err) {
+      alert(err);
+    }
+
+    try {
+      await fire.auth().createUserWithEmailAndPassword(email, password);
     } catch (err) {
       alert(err);
     }
   };
+
+  console.log(`email from signup ${email}`);
+  console.log(`pass from signup ${password}`);
+  console.log("username from" + userName);
 
   return (
     <Grid>
@@ -31,6 +58,19 @@ const Login = () => {
               alt="logo"
             />
           </FlexWrapper>
+          <Name>
+            <TextField
+              id="outlined-basic"
+              label="First Name*"
+              variant="outlined"
+              onChange={(e) => setUserName(e.target.value)}
+            />
+            <TextField
+              id="outlined-basic"
+              label="Last Name*"
+              variant="outlined"
+            />
+          </Name>
           <TextField
             label="Email*"
             variant="outlined"
@@ -43,17 +83,17 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button variant="contained" color="primary" onClick={login}>
-            Sign in
+          <Button variant="contained" color="primary" onClick={signUp}>
+            Sign Up
           </Button>
-          <SignUpLink to="/signup">Dont have an account? Sign up!</SignUpLink>
+          <SigninLink to="/login">Already have an acoount? Sign in!</SigninLink>
         </Content>
       </FlexWrapper>
     </Grid>
   );
 };
 
-export default Login;
+export default SignUp;
 
 const Grid = styled.div`
   display: grid;
@@ -88,7 +128,7 @@ const About = styled.div`
 const Content = styled.div`
   display: grid;
   grid-auto-flow: row;
-  grid-gap: 11%;
+  grid-gap: 6%;
   width: 100%;
   @media (min-width: 768px) {
     width: 40%;
@@ -107,7 +147,13 @@ const FlexWrapper = styled.div`
   padding-bottom: 12%;
 `;
 
-const SignUpLink = styled(Link)`
+const SigninLink = styled(Link)`
   color: rgba(0, 0, 0, 0.87);
   font-size: 1.1rem;
+`;
+
+const Name = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 3%;
 `;

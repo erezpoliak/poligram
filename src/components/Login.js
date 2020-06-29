@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import fire from "./config/Fire";
+import { Insta_Context } from "./Context";
 
-const SignUp = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { set_currentUser } = useContext(Insta_Context);
 
-  const signUp = async () => {
+  const login = async () => {
     try {
-      await fire.auth().createUserWithEmailAndPassword(email, password);
+      await fire.auth().signInWithEmailAndPassword(email, password);
+      const currentUser = await fetch(`http://localhost:8080/users/${email}`);
+      const jsoned = await currentUser.json();
+      set_currentUser(jsoned);
     } catch (err) {
       alert(err);
     }
@@ -31,18 +36,6 @@ const SignUp = () => {
               alt="logo"
             />
           </FlexWrapper>
-          <Name>
-            <TextField
-              id="outlined-basic"
-              label="First Name*"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-basic"
-              label="Last Name*"
-              variant="outlined"
-            />
-          </Name>
           <TextField
             label="Email*"
             variant="outlined"
@@ -55,17 +48,17 @@ const SignUp = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button variant="contained" color="primary" onClick={signUp}>
-            Sign Up
+          <Button variant="contained" color="primary" onClick={login}>
+            Sign in
           </Button>
-          <SigninLink to="/login">Already have an acoount? Sign in!</SigninLink>
+          <SignUpLink to="/signup">Dont have an account? Sign up!</SignUpLink>
         </Content>
       </FlexWrapper>
     </Grid>
   );
 };
 
-export default SignUp;
+export default Login;
 
 const Grid = styled.div`
   display: grid;
@@ -100,7 +93,7 @@ const About = styled.div`
 const Content = styled.div`
   display: grid;
   grid-auto-flow: row;
-  grid-gap: 6%;
+  grid-gap: 11%;
   width: 100%;
   @media (min-width: 768px) {
     width: 40%;
@@ -119,13 +112,7 @@ const FlexWrapper = styled.div`
   padding-bottom: 12%;
 `;
 
-const SigninLink = styled(Link)`
+const SignUpLink = styled(Link)`
   color: rgba(0, 0, 0, 0.87);
   font-size: 1.1rem;
-`;
-
-const Name = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 3%;
 `;
