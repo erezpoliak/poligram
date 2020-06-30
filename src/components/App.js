@@ -7,6 +7,7 @@ import SignUp from "./SignUp";
 import fire from "./config/Fire";
 import UploadPage from "./UploadPage";
 import { Insta_Context } from "./Context";
+import ProfilePage from "./ProfilePage";
 
 const App = () => {
   // const [user, setUser] = useState({});
@@ -84,6 +85,7 @@ const App = () => {
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
       <Route path="/upload" component={UploadPage} />
+      <Route path="/profile" component={ProfilePage} />
 
       {/* {user ? <Home /> : <Login />} */}
       {currentUser ? <Redirect to="/home" /> : <Redirect to="/login" />}

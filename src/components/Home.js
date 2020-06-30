@@ -12,6 +12,7 @@ const Home = () => {
   const [msgs, setMsgs] = useState([]);
   const [msg, setMsg] = useState("");
   const { currentUser, set_currentUser } = useContext(Insta_Context);
+  const [answered, set_answered] = useState(false);
 
   const fetchMsgs = async () => {
     const msgs = await fetch("http://localhost:8080/messages");
@@ -47,20 +48,31 @@ const Home = () => {
   console.log("current user from home");
   console.log(currentUser);
 
+  const uploadProfilePic = () => {
+    const answer = window.confirm(
+      "u seem to have no profile pic, wanna upload one"
+    );
+    if (!answer) set_answered(true);
+  };
+
   return (
-    <Grid>
-      <HomeTopBar />
-      <Description>
-        <Title>Poligram</Title>A social network to explore and share your art
-        and creative ideas
-        <PostLink to="/upload">
-          <Button variant="contained" color="primary" component="span">
-            Upload a post
-          </Button>
-        </PostLink>
-      </Description>
-      <Feed />
-    </Grid>
+    <>
+      {/* {currentUser && currentUser.profilePhoto && !answered ? ( */}
+      <Grid>
+        <HomeTopBar />
+        <Description>
+          <Title>Poligram</Title>A social network to explore and share your art
+          and creative ideas
+          <PostLink to="/upload">
+            <Button variant="contained" color="primary" component="span">
+              Upload a post
+            </Button>
+          </PostLink>
+        </Description>
+        <Feed />
+      </Grid>
+      {/* // ) : ( // window.confirm("upload a profile photo?") // )} */}
+    </>
   );
 };
 

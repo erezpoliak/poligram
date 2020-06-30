@@ -4,6 +4,9 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import fire from "./config/Fire";
+import { Link } from "react-router-dom";
+import ProfilePage from "./ProfilePage";
+import styled from "styled-components";
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,8 +38,10 @@ const AccountMenu = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <ProfileLink to="/profile">
+          <MenuItem>Profile</MenuItem>
+        </ProfileLink>
+        {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
         <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </div>
@@ -44,3 +49,8 @@ const AccountMenu = () => {
 };
 
 export default AccountMenu;
+
+const ProfileLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
