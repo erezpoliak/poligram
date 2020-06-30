@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import HomeTopBar from "./HomeTopBar";
+import { Link } from "react-router-dom";
+import { Insta_Context } from "./Context";
 
 const ProfilePage = () => {
+  const { currentUser } = useContext(Insta_Context);
+
   return (
     <Grid>
       <HomeTopBar />
       {/* <ProfileName>Erez Poliak</ProfileName> */}
       <Profile>
-        <ProfilePic />
+        <ProfilePic src={currentUser ? currentUser.profilePhoto : ""} />
         <ProfileStatsWrapper>
           <div>3</div>
           <div>Posts</div>
@@ -24,8 +28,9 @@ const ProfilePage = () => {
       </Profile>
       <Bio>
         <h2>Erez Poliak</h2>
-        producer guitarist based at laland
+        {currentUser ? currentUser.bio : ""}
       </Bio>
+      <EditProfile to="/edit-profile">Edit Profile</EditProfile>
     </Grid>
   );
 };
@@ -34,7 +39,7 @@ export default ProfilePage;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-rows: 12vh 30vh 1fr;
+  grid-template-rows: 12vh 30vh;
   color: black;
   grid-gap: 4vh;
 `;
@@ -67,6 +72,16 @@ const ProfileStatsWrapper = styled.div`
   align-items: center;
 `;
 
-const Bio = styled.p`
+const Bio = styled.div`
   padding-left: 10vh;
+`;
+
+const EditProfile = styled(Link)`
+  text-decoration: none;
+  color: black;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4vh;
 `;

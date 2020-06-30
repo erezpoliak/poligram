@@ -67,6 +67,7 @@ const Post = () => {
       <InputContainer>
         <UploadBtn />
         {photo && <img src={preview} width="300px" height="300px" />}
+        {/* {photo && <img src={preview} width="200vh" height="200vh" />} */}
         <TextField
           label="Title"
           variant="outlined"
