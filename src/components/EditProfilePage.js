@@ -10,7 +10,9 @@ import TextField from "@material-ui/core/TextField";
 const EditProfilePage = () => {
   const [editPic, set_editPic] = useState(false);
   const [editBio, set_editBio] = useState(false);
-  const { photo, set_photo, currentUser } = useContext(Insta_Context);
+  const { photo, set_photo, currentUser, set_currentUser } = useContext(
+    Insta_Context
+  );
   const [preview, setPreview] = useState("");
   const [bio, setBio] = useState("");
 
@@ -44,8 +46,13 @@ const EditProfilePage = () => {
             `http://localhost:8080/users/${currentUser._id}`,
             requestOptions
           );
+          const updatedUser = await fetch(
+            `http://localhost:8080/users/${currentUser.email}`
+          );
           alert("succesfully updated photo!");
           set_photo("");
+          const userJson = await updatedUser.json();
+          set_currentUser(userJson);
         } catch (err) {
           console.log(err);
           alert("failed to upload photo");
@@ -67,6 +74,11 @@ const EditProfilePage = () => {
         `http://localhost:8080/users/${currentUser._id}`,
         requestOptions
       );
+      const updatedUser = await fetch(
+        `http://localhost:8080/users/${currentUser.email}`
+      );
+      const userJson = await updatedUser.json();
+      set_currentUser(userJson);
       alert("succesfully updated bio!");
     } catch (err) {
       console.log(err);
