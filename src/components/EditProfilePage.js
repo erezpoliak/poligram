@@ -6,6 +6,7 @@ import UploadBtn from "./UploadBtn";
 import { Insta_Context } from "./Context";
 import { storage } from "./config/Fire";
 import TextField from "@material-ui/core/TextField";
+import Divider from "@material-ui/core/Divider";
 
 const EditProfilePage = () => {
   const [editPic, set_editPic] = useState(false);
@@ -85,62 +86,79 @@ const EditProfilePage = () => {
     }
   };
 
+  const bioClicked = () => {
+    if (editPic) set_editPic(!editPic);
+    set_editBio(!editBio);
+  };
+
+  const picClicked = () => {
+    if (editBio) set_editBio(!editBio);
+    set_editPic(!editPic);
+  };
+
   return (
-    <Grid>
+    <>
       <HomeTopBar />
-      <Button
-        variant="contained"
-        color="primary"
-        component="span"
-        onClick={() => set_editPic(!editPic)}
-      >
-        Edit Profile pic
-      </Button>
-      {editPic ? (
-        <>
-          <UploadBtn />
-          <PicPreview>
-            <img src={preview} width="300px" height="300px" />
-          </PicPreview>
+      <Grid>
+        <SideBar>
           <Button
             variant="contained"
             color="primary"
             component="span"
-            onClick={updateProfilePic}
+            onClick={picClicked}
           >
-            Update Profile pic!
+            Edit Profile pic
           </Button>
-        </>
-      ) : (
-        ""
-      )}
-      <Button
-        variant="contained"
-        color="primary"
-        component="span"
-        onClick={() => set_editBio(!editBio)}
-      >
-        Edit Bio
-      </Button>
-      {editBio ? (
-        <>
-          <TextField
-            variant="outlined"
-            onChange={(e) => setBio(e.target.value)}
-          />
           <Button
             variant="contained"
             color="primary"
             component="span"
-            onClick={updateBio}
+            onClick={bioClicked}
           >
-            Update Bio!
+            Edit Bio
           </Button>
-        </>
-      ) : (
-        ""
-      )}
-    </Grid>
+        </SideBar>
+        <Divider orientation="vertical" />
+        <Content>
+          {editBio ? (
+            <>
+              <TextField
+                variant="outlined"
+                onChange={(e) => setBio(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                component="span"
+                onClick={updateBio}
+              >
+                Update Bio!
+              </Button>
+            </>
+          ) : (
+            ""
+          )}
+          {editPic ? (
+            <>
+              <UploadBtn />
+              <PicPreview>
+                <img src={preview} width="300px" height="300px" />
+              </PicPreview>
+              <Button
+                variant="contained"
+                color="primary"
+                component="span"
+                onClick={updateProfilePic}
+              >
+                Update Profile pic!
+              </Button>
+            </>
+          ) : (
+            ""
+          )}
+        </Content>
+      </Grid>
+    </>
   );
 };
 
@@ -148,7 +166,9 @@ export default EditProfilePage;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-rows: 12vh;
+  /* grid-template-rows: 12vh; */
+  grid-template-columns: 30vw 1fr 70vw;
+  height: 88vh;
 `;
 
 const PicPreview = styled.div`
@@ -157,4 +177,16 @@ const PicPreview = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const SideBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `;

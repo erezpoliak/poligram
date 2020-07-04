@@ -38,7 +38,7 @@ export default HomeTopBar;
 
 const Container = styled.div`
   width: 100vw;
-  // height: 12vh;
+  height: 12vh;
   display: grid;
   grid-template-columns: 30% 35% 35%;
   // border: 1px solid black;
