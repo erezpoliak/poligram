@@ -30,12 +30,35 @@ export async function getComments() {
   }
 }
 
-// export async function getCurrentUser() {
+export async function getPhotosByUserId(userId) {
+  try {
+    const url = `http://localhost:8080/photos/${userId}`;
+    const response = await fetch(url);
+    const jsoned = await response.json();
+    return jsoned;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// export async function postCommnet(comment){
+//   const requestOptions = {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       userId: photo.userId,
+//       commentedUserId: currentUser._id,
+//       photoId: photo._id,
+//       comment: newComment,
+//     }),
+//   };
 //   try {
-//     const url = "http://localhost:8080/session";
-//     const response = await fetch(url);
-//     const jsoned = await response.json();
-//     return jsoned;
+//     const response = await fetch(
+//       "http://localhost:8080/comments",
+//       requestOptions
+//     );
+//     console.log("uploaded comment");
+//     inputRef.current.value = "";
 //   } catch (err) {
 //     console.log(err);
 //   }
