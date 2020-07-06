@@ -41,6 +41,19 @@ export async function getPhotosByUserId(userId) {
   }
 }
 
+export async function deletePhotoByPhotoId(photoId) {
+  try {
+    const url = `http://localhost:8080/photos/${photoId}`;
+    const requestOptions = {
+      method: "DELETE",
+    };
+    const response = await fetch(url, requestOptions);
+    console.log("response from deletePghotoByPhotoId");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 // export async function postCommnet(comment){
 //   const requestOptions = {
 //     method: "POST",

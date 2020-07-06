@@ -17,10 +17,12 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const fetchedPhotos = await Api.getPhotosByUserId(currentUser._id);
-      set_photos(fetchedPhotos);
-      const fetchedComments = await Api.getComments();
-      set_comments(fetchedComments);
+      if (currentUser) {
+        const fetchedPhotos = await Api.getPhotosByUserId(currentUser._id);
+        set_photos(fetchedPhotos);
+        const fetchedComments = await Api.getComments();
+        set_comments(fetchedComments);
+      }
     };
     fetchPosts();
   }, [comments]);
@@ -122,6 +124,14 @@ const ProfilePage = () => {
                   id={photo._id}
                 >
                   <CardContent>
+                    <input
+                      style={{ position: "relative", left: "60%" }}
+                      type="submit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        Api.deletePhotoByPhotoId(photo._id);
+                      }}
+                    />
                     <h1 style={{ textAlign: "center" }}>{photo.title}</h1>
                     <FlexWrapper>
                       <img src={photo.url} width="60%" alt={photo.title} />

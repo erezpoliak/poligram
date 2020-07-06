@@ -104,6 +104,18 @@ const Feed = () => {
                 id={photo._id}
               >
                 <CardContent>
+                  {photo.userId === currentUser._id ? (
+                    <input
+                      style={{ position: "relative", left: "60%" }}
+                      type="submit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        Api.deletePhotoByPhotoId(photo._id);
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                   <h1 style={{ textAlign: "center" }}>{photo.title}</h1>
                   <FlexWrapper>
                     <img src={photo.url} width="60%" alt={photo.title} />

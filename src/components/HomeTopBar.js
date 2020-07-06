@@ -11,16 +11,16 @@ import { Link } from "react-router-dom";
 const HomeTopBar = () => {
   return (
     <Container>
-      <HomeLink to="/home">
+      <LinkWrapper to="/home">
         <Title>Poligram</Title>
-      </HomeLink>
+      </LinkWrapper>
       <FlexWrapper>
         <AutoCompleteSearch />
       </FlexWrapper>
       <IconWrapper>
-        <CameraWrapper>
+        <LinkWrapper to="/upload">
           <CameraBtn size="large" />
-        </CameraWrapper>
+        </LinkWrapper>
         <HomeWrapper to="/home">
           <HomeIcon size="large" />
         </HomeWrapper>
@@ -82,13 +82,15 @@ const HomeWrapper = styled(Link)`
   color: rgba(210, 225, 243, 1);
 `;
 
-const CameraWrapper = styled.div`
-  padding-right: 7%;
-`;
+// const CameraWrapper = styled.div`
+//   padding-right: 7%;
+// `;
 
-const HomeLink = styled(Link)`
+const LinkWrapper = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
   text-decoration: none;
+
+  padding-right: 7%;
 `;
