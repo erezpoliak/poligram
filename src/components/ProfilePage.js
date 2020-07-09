@@ -18,7 +18,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       if (currentUser) {
-        const fetchedPhotos = await Api.getPhotosByUserId(currentUser._id);
+        const fetchedPhotos = await Api.getPhotosByUser(currentUser);
         set_photos(fetchedPhotos);
         const fetchedComments = await Api.getComments();
         set_comments(fetchedComments);
@@ -27,10 +27,10 @@ const ProfilePage = () => {
     fetchPosts();
   }, [comments]);
 
-  const getCommentsForPhoto = (photoId) => {
+  const getCommentsForPhoto = (photo) => {
     const allComments = comments;
     const commentsForPhoto = allComments.filter(
-      (comment) => comment.photoId === photoId
+      (comment) => comment.photo === photo
     );
     // console.log(commentsForPhoto);
     return commentsForPhoto.map((comment) => {
@@ -71,9 +71,9 @@ const ProfilePage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: photo.userId,
-          commentedUserId: currentUser._id,
-          photoId: photo._id,
+          user: photo.user,
+          commentedUser: currentUser,
+          photo: photo,
           comment: newComment,
         }),
       };
@@ -144,7 +144,7 @@ const ProfilePage = () => {
                     <FlexWrapper>
                       <img src={photo.url} width="60%" alt={photo.title} />
                     </FlexWrapper>
-                    {comments ? getCommentsForPhoto(photo._id) : ""}
+                    {comments ? getCommentsForPhoto(photo) : ""}
                     <br />
                     <br />
                     <form>

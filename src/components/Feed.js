@@ -23,26 +23,28 @@ const Feed = () => {
   const [newComment, set_newComment] = useState("");
   const inputRef = useRef();
 
-  useEffect(() => {
-    const buildRenderedComments = async () => {
-      const commentsForPhoto = [...comments];
-      const commentsArr = await Promise.all(
-        commentsForPhoto.map(async (comment) => {
-          const CommentedUser = await Api.getUserById(comment.commentedUserId);
-          const user = await Api.getUserById(comment.userId);
-          return {
-            CommentedUser,
-            comment: comment.comment,
-            photoId: comment.photoId,
-            id: comment._id,
-            user,
-          };
-        })
-      );
-      set_commentsForRender(commentsArr);
-    };
-    buildRenderedComments();
-  }, [comments]);
+  // useEffect(() => {
+  //   const buildRenderedComments = async () => {
+  //     const commentsForPhoto = [...comments];
+  //     const commentsArr = await Promise.all(
+  //       commentsForPhoto.map(async (comment) => {
+  //         const CommentedUser = await Api.getUserById(comment.commentedUserId);
+  //         const user = await Api.getUserById(comment.userId);
+  //         return {
+  //           CommentedUser,
+  //           comment: comment.comment,
+  //           photoId: comment.photoId,
+  //           id: comment._id,
+  //           user,
+  //         };
+  //       })
+  //     );
+  //     set_commentsForRender(commentsArr);
+  //   };
+  //   buildRenderedComments();
+  // }, [comments]);
+
+  // useEffect(() => {}, [comments]);
 
   const deleteComment = async (commentId) => {
     await Api.deleteComment(commentId);
@@ -64,29 +66,35 @@ const Feed = () => {
     set_comments(newComments);
   };
 
-  const getCommentsForPhoto = (photoId) => {
-    const commentsForPhoto = commentsForRender.filter(
-      (comment) => comment.photoId === photoId
+  const getCommentsForPhoto = (photo) => {
+    const commentsForPhoto = comments.filter(
+      (comment) => comment.photo._id === photo._id
     );
     return commentsForPhoto.map((comment) => {
       if (
         comment.user._id === currentUser._id ||
-        comment.CommentedUser._id === currentUser._id
+        comment.commentedUser._id === currentUser._id
       ) {
-        console.log(comment.CommentedUser);
+        console.log(comment.commentedUser);
         return (
           <CommentWrapper>
             <FlexWrapper>
-              <ProfilePhoto src={comment.CommentedUser.profilePhoto} />
+              <ProfilePhoto
+                src={
+                  comment && comment.commentedUser
+                    ? comment.commentedUser.profilePhoto
+                    : ""
+                }
+              />
             </FlexWrapper>
             <div style={{ fontWeight: "900" }}>
-              {comment.CommentedUser.userName}
+              {comment.commentedUser.userName}
             </div>
             <div>{comment.comment}</div>
             <Button
               variant="contained"
               color="primary"
-              onClick={() => deleteComment(comment.id)}
+              onClick={() => deleteComment(comment._id)}
             >
               x
             </Button>
@@ -96,10 +104,10 @@ const Feed = () => {
         return (
           <CommentWrapper>
             <FlexWrapper>
-              <ProfilePhoto src={comment.CommentedUser.profilePhoto} />
+              <ProfilePhoto src={comment.commentedUser.profilePhoto} />
             </FlexWrapper>
             <div style={{ fontWeight: "900" }}>
-              {comment.CommentedUser.userName}
+              {comment.commentedUser.userName}
             </div>
             <div>{comment.comment}</div>
           </CommentWrapper>
@@ -111,7 +119,8 @@ const Feed = () => {
   const checkIfLiked = (photo) => {
     const like = likes.filter(
       (like) =>
-        like.photoId === photo._id && like.userWhoLikedIt === currentUser._id
+        like.photo._id === photo._id &&
+        like.userWhoLikedIt._id === currentUser._id
     );
     console.log("is array of likes is array");
     console.log(Array.isArray(like));
@@ -126,8 +135,8 @@ const Feed = () => {
 
   const changeLike = async (photo) => {
     console.log("went inside changeLike fn");
-    const ifLiked = checkIfLiked(photo);
-    if (ifLiked) {
+    const isLiked = checkIfLiked(photo);
+    if (isLiked) {
       console.log("fn changelike got true from isliked fn");
       const like = await Api.getLikeByPhotoAndUserId(
         currentUser._id,
@@ -139,14 +148,29 @@ const Feed = () => {
       set_likes(newLikes);
     } else {
       console.log("fn changelike got false from isliked fn");
-      await Api.postLike(photo.userId, photo._id, currentUser._id);
+      await Api.postLike(photo.user, photo, currentUser);
       const newLikes = await Api.getLikes();
       set_likes(newLikes);
     }
   };
 
-  console.log("commentsForRender");
-  console.log(commentsForRender);
+  const getLikedBy = (photo) => {
+    const likeArr = likes.filter((like) => like.photo._id === photo._id);
+    const lastLike = likeArr[likeArr.length - 1];
+    return (
+      <LikedByGrid>
+        <div>Liked By:</div>
+        <div>
+          {lastLike && lastLike.userWhoLikedIt
+            ? lastLike.userWhoLikedIt.userName
+            : ""}
+        </div>
+        <div>
+          {likeArr.length > 1 ? `and ${likeArr.length - 1} others` : ""}
+        </div>
+      </LikedByGrid>
+    );
+  };
 
   return (
     <Container>
@@ -163,7 +187,7 @@ const Feed = () => {
                 id={photo._id}
               >
                 <CardContent>
-                  {photo.userId === currentUser._id ? (
+                  {photo.user._id === currentUser._id ? (
                     <Button
                       variant="contained"
                       color="primary"
@@ -179,9 +203,9 @@ const Feed = () => {
                   <FlexWrapper>
                     <img src={photo.url} width="60%" alt={photo.title} />
                   </FlexWrapper>
-                  <div>Liked By:</div>
+                  {likes.length > 0 ? getLikedBy(photo) : ""}
                   {/* put last like of the array and then show the other in number of likes, make sure u can like dislike */}
-                  {commentsForRender ? getCommentsForPhoto(photo._id) : ""}
+                  {comments ? getCommentsForPhoto(photo) : ""}
                   <br />
                   <br />
                   <form>
@@ -254,4 +278,12 @@ const LikeBtn = styled.div`
   position: relative;
   left: 70%;
   cursor: pointer;
+`;
+
+const LikedByGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 25%);
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
 `;

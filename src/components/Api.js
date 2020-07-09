@@ -30,9 +30,9 @@ export async function getComments() {
   }
 }
 
-export async function getPhotosByUserId(userId) {
+export async function getPhotosByUser(user) {
   try {
-    const url = `http://localhost:8080/photos/${userId}`;
+    const url = `http://localhost:8080/photos/${user}`;
     const response = await fetch(url);
     const jsoned = await response.json();
     return jsoned;
@@ -82,9 +82,9 @@ export const uploadNewComment = async (photo, newComment, currentUser) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: photo.userId,
-        commentedUserId: currentUser._id,
-        photoId: photo._id,
+        user: photo.user,
+        commentedUser: currentUser,
+        photo: photo,
         comment: newComment,
       }),
     };
@@ -124,14 +124,14 @@ export const deleteLike = async (likeId) => {
   }
 };
 
-export const postLike = async (userId, photoId, userWhoLikedIt) => {
+export const postLike = async (user, photo, userWhoLikedIt) => {
   const url = `http://localhost:8080/likes`;
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      userId: userId,
-      photoId: photoId,
+      user: user,
+      photo: photo,
       userWhoLikedIt: userWhoLikedIt,
     }),
   };
@@ -144,6 +144,17 @@ export const postLike = async (userId, photoId, userWhoLikedIt) => {
 
 export const getLikeByPhotoAndUserId = async (userId, photoId) => {
   const url = `http://localhost:8080/likes/${userId}/${photoId}`;
+  try {
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getUsers = async () => {
+  const url = "http://localhost:8080/users";
   try {
     const response = await fetch(url);
     const result = await response.json();

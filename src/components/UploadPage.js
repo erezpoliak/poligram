@@ -41,7 +41,7 @@ const Post = () => {
           body: JSON.stringify({
             url: url,
             title: title,
-            userId: currentUser._id,
+            user: currentUser,
           }),
         };
         try {
@@ -50,6 +50,7 @@ const Post = () => {
             requestOptions
           );
           console.log("successfully uploaded post");
+          alert("successfully uploaded post");
           set_photo();
           const newPhotos = await Api.getPhotos();
           set_photos(newPhotos);

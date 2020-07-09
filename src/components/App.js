@@ -12,7 +12,7 @@ import EditProfilePage from "./EditProfilePage";
 
 const App = () => {
   // const [user, setUser] = useState({});
-  const { set_currentUser, currentUser } = useContext(Insta_Context);
+  const { set_currentUser, currentUser, redirect } = useContext(Insta_Context);
   const [email, setEmail] = useState("");
   const [usersApi, set_usersApi] = useState({});
   const [msgsApi, set_msgsApi] = useState({});
@@ -94,7 +94,7 @@ const App = () => {
       <Route path="/edit-profile" component={EditProfilePage} />
 
       {/* {user ? <Home /> : <Login />} */}
-      {currentUser ? <Redirect to="/home" /> : <Redirect to="/login" />}
+      {currentUser ? <Redirect to={redirect} /> : <Redirect to="/login" />}
     </Router>
   );
 };

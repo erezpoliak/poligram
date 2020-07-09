@@ -11,6 +11,7 @@ const Insta_Provider = ({ children }) => {
   const [photos, set_photos] = useState([]);
   const [comments, set_comments] = useState([]);
   const [likes, set_likes] = useState([]);
+  const [redirect, set_redirect] = useState("/home");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,11 +21,21 @@ const Insta_Provider = ({ children }) => {
       set_comments(fetchComments);
       const fetchedLikes = await Api.getLikes();
       set_likes(fetchedLikes);
+      const fetchedUsers = await Api.getUsers();
+      set_users(fetchedUsers);
     };
     fetchData();
   }, []);
 
-  const state = { users, currentUser, photo, photos, comments, likes };
+  const state = {
+    users,
+    currentUser,
+    photo,
+    photos,
+    comments,
+    likes,
+    redirect,
+  };
   const actions = {
     set_users,
     set_currentUser,
@@ -32,6 +43,7 @@ const Insta_Provider = ({ children }) => {
     set_photos,
     set_comments,
     set_likes,
+    set_redirect,
   };
 
   return <Provider value={{ ...state, ...actions }}>{children}</Provider>;
