@@ -7,9 +7,10 @@ import { Insta_Context } from "./Context";
 import Button from "@material-ui/core/Button";
 import { storage } from "./config/Fire";
 import { Link } from "react-router-dom";
+import * as Api from "./Api";
 
 const Post = () => {
-  const { photo, set_photo } = useContext(Insta_Context);
+  const { photo, set_photo, set_photos } = useContext(Insta_Context);
   const [title, set_title] = useState("");
   const [preview, setPreview] = useState("");
   const { currentUser } = useContext(Insta_Context);
@@ -50,6 +51,8 @@ const Post = () => {
           );
           console.log("successfully uploaded post");
           set_photo();
+          const newPhotos = await Api.getPhotos();
+          set_photos(newPhotos);
           return response;
         } catch (err) {
           console.log(err);

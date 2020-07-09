@@ -60,19 +60,23 @@ const App = () => {
   };
 
   const fetchCurrentUser = async () => {
-    // console.log("is email empty from fetch current user");
-    // console.log(email === "");
     if (email !== "") {
+      console.log("email from fn app" + email);
       const response = await fetch(`http://localhost:8080/users/${email}`);
-      const result = await response.json();
-      console.log("current user from fetchCurrentUser");
-      console.log(result);
-      set_currentUser(result);
+      if (response !== "") {
+        const result = await response.json();
+        console.log("current user from fetchCurrentUser");
+        console.log(result);
+        set_currentUser(result);
+      } else set_currentUser();
     } else console.log("emnail is empty");
   };
 
   console.log("current user from app.js");
   console.log(currentUser);
+
+  console.log("email fromn app");
+  console.log(email);
 
   console.log(`users api`);
   console.log(usersApi);

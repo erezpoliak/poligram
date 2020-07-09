@@ -110,7 +110,7 @@ const ProfilePage = () => {
         </ProfileStatsWrapper>
       </Profile>
       <Bio>
-        <h2>Erez Poliak</h2>
+        <h2>{currentUser ? currentUser.userName : ""}</h2>
         {currentUser ? currentUser.bio : ""}
       </Bio>
       <EditProfile to="/edit-profile">Edit Profile</EditProfile>
@@ -124,14 +124,22 @@ const ProfilePage = () => {
                   id={photo._id}
                 >
                   <CardContent>
-                    <input
+                    {/* <input
                       style={{ position: "relative", left: "60%" }}
                       type="submit"
                       onClick={(e) => {
                         e.preventDefault();
                         Api.deletePhotoByPhotoId(photo._id);
                       }}
-                    />
+                    /> */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => Api.deletePhotoByPhotoId(photo._id)}
+                      style={{ postion: "relative", left: "70%" }}
+                    >
+                      x
+                    </Button>
                     <h1 style={{ textAlign: "center" }}>{photo.title}</h1>
                     <FlexWrapper>
                       <img src={photo.url} width="60%" alt={photo.title} />

@@ -58,19 +58,12 @@ const SignUp = () => {
               alt="logo"
             />
           </FlexWrapper>
-          <Name>
-            <TextField
-              id="outlined-basic"
-              label="First Name*"
-              variant="outlined"
-              onChange={(e) => setUserName(e.target.value)}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Last Name*"
-              variant="outlined"
-            />
-          </Name>
+          <TextField
+            id="outlined-basic"
+            label="User Name*"
+            variant="outlined"
+            onChange={(e) => setUserName(e.target.value)}
+          />
           <TextField
             label="Email*"
             variant="outlined"
@@ -80,6 +73,7 @@ const SignUp = () => {
           <TextField
             label="Password*"
             variant="outlined"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -152,8 +146,8 @@ const SigninLink = styled(Link)`
   font-size: 1.1rem;
 `;
 
-const Name = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 3%;
-`;
+// const Name = styled.div`
+//   display: grid;
+//   grid-template-columns: repeat(2, 1fr);
+//   grid-gap: 3%;
+// `;

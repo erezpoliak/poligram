@@ -5,93 +5,148 @@ import CardContent from "@material-ui/core/CardContent";
 import * as Api from "./Api";
 import { Insta_Context } from "./Context";
 import Button from "@material-ui/core/Button";
+import { ThumbsUp } from "@styled-icons/fa-solid/ThumbsUp";
+import { TruckMonster } from "styled-icons/fa-solid";
+// import Async from 'react-async';
 
 const Feed = () => {
-  const { currentUser } = useContext(Insta_Context);
-  const [photos, set_photos] = useState([]);
-  const [comments, set_comments] = useState([]);
+  const {
+    currentUser,
+    photos,
+    comments,
+    set_photos,
+    set_comments,
+    likes,
+    set_likes,
+  } = useContext(Insta_Context);
+  const [commentsForRender, set_commentsForRender] = useState();
   const [newComment, set_newComment] = useState("");
   const inputRef = useRef();
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const fetchedphotos = await Api.getPhotos();
-      set_photos(fetchedphotos);
-      const fetchComments = await Api.getComments();
-      set_comments(fetchComments);
+    const buildRenderedComments = async () => {
+      const commentsForPhoto = [...comments];
+      const commentsArr = await Promise.all(
+        commentsForPhoto.map(async (comment) => {
+          const CommentedUser = await Api.getUserById(comment.commentedUserId);
+          const user = await Api.getUserById(comment.userId);
+          return {
+            CommentedUser,
+            comment: comment.comment,
+            photoId: comment.photoId,
+            id: comment._id,
+            user,
+          };
+        })
+      );
+      set_commentsForRender(commentsArr);
     };
-    fetchPosts();
+    buildRenderedComments();
   }, [comments]);
 
-  //   console.log(comments);
-
-  const getCommentsForPhoto = (photoId) => {
-    const allComments = comments;
-    const commentsForPhoto = allComments.filter(
-      (comment) => comment.photoId === photoId
-    );
-    // console.log(commentsForPhoto);
-    return commentsForPhoto.map((comment) => {
-      if (
-        comment.commentedUserId === currentUser._id ||
-        comment.userId === currentUser._id
-      ) {
-        return (
-          <>
-            <div>{comment.comment}</div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => deleteComment(comment._id)}
-            >
-              x
-            </Button>
-          </>
-        );
-      } else return <div>{comment.comment}</div>;
-    });
+  const deleteComment = async (commentId) => {
+    await Api.deleteComment(commentId);
+    const newComments = await Api.getComments();
+    set_comments(newComments);
   };
 
-  const deleteComment = async (commentId) => {
-    const requestOptions = { method: "DELETE" };
-    try {
-      await fetch(
-        `http://localhost:8080/comments/${commentId}`,
-        requestOptions
-      );
-    } catch (err) {
-      console.log(err);
-    }
+  const deletePhoto = async (photoId) => {
+    await Api.deletePhotoByPhotoId(photoId);
+    const newPhotos = await Api.getPhotos();
+    set_photos(newPhotos);
   };
 
   const uploadNewComment = (photo) => async (e) => {
     e.preventDefault();
-    console.log("newComment" + newComment);
-    console.log("submit clicked");
-    if (newComment) {
-      console.log("new Comment is true");
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: photo.userId,
-          commentedUserId: currentUser._id,
-          photoId: photo._id,
-          comment: newComment,
-        }),
-      };
-      try {
-        const response = await fetch(
-          "http://localhost:8080/comments",
-          requestOptions
+    await Api.uploadNewComment(photo, newComment, currentUser);
+    inputRef.current.value = "";
+    const newComments = await Api.getComments();
+    set_comments(newComments);
+  };
+
+  const getCommentsForPhoto = (photoId) => {
+    const commentsForPhoto = commentsForRender.filter(
+      (comment) => comment.photoId === photoId
+    );
+    return commentsForPhoto.map((comment) => {
+      if (
+        comment.user._id === currentUser._id ||
+        comment.CommentedUser._id === currentUser._id
+      ) {
+        console.log(comment.CommentedUser);
+        return (
+          <CommentWrapper>
+            <FlexWrapper>
+              <ProfilePhoto src={comment.CommentedUser.profilePhoto} />
+            </FlexWrapper>
+            <div style={{ fontWeight: "900" }}>
+              {comment.CommentedUser.userName}
+            </div>
+            <div>{comment.comment}</div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => deleteComment(comment.id)}
+            >
+              x
+            </Button>
+          </CommentWrapper>
         );
-        console.log("uploaded comment");
-        inputRef.current.value = "";
-      } catch (err) {
-        console.log(err);
+      } else {
+        return (
+          <CommentWrapper>
+            <FlexWrapper>
+              <ProfilePhoto src={comment.CommentedUser.profilePhoto} />
+            </FlexWrapper>
+            <div style={{ fontWeight: "900" }}>
+              {comment.CommentedUser.userName}
+            </div>
+            <div>{comment.comment}</div>
+          </CommentWrapper>
+        );
       }
+    });
+  };
+
+  const checkIfLiked = (photo) => {
+    const like = likes.filter(
+      (like) =>
+        like.photoId === photo._id && like.userWhoLikedIt === currentUser._id
+    );
+    console.log("is array of likes is array");
+    console.log(Array.isArray(like));
+    if (like.length === 0) {
+      console.log("it is false");
+      return false;
+    } else {
+      console.log("it is true");
+      return true;
     }
   };
+
+  const changeLike = async (photo) => {
+    console.log("went inside changeLike fn");
+    const ifLiked = checkIfLiked(photo);
+    if (ifLiked) {
+      console.log("fn changelike got true from isliked fn");
+      const like = await Api.getLikeByPhotoAndUserId(
+        currentUser._id,
+        photo._id
+      );
+      const likeId = like[0]._id;
+      await Api.deleteLike(likeId);
+      const newLikes = await Api.getLikes();
+      set_likes(newLikes);
+    } else {
+      console.log("fn changelike got false from isliked fn");
+      await Api.postLike(photo.userId, photo._id, currentUser._id);
+      const newLikes = await Api.getLikes();
+      set_likes(newLikes);
+    }
+  };
+
+  console.log("commentsForRender");
+  console.log(commentsForRender);
 
   return (
     <Container>
@@ -99,20 +154,24 @@ const Feed = () => {
         ? photos.map((photo) => {
             return (
               <Card
-                style={{ height: "60vh", width: "20vw", overflow: "scroll" }}
+                style={{
+                  height: "60vh",
+                  width: "20vw",
+                  overflow: "scroll",
+                }}
                 variant="outlined"
                 id={photo._id}
               >
                 <CardContent>
                   {photo.userId === currentUser._id ? (
-                    <input
-                      style={{ position: "relative", left: "60%" }}
-                      type="submit"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        Api.deletePhotoByPhotoId(photo._id);
-                      }}
-                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => deletePhoto(photo._id)}
+                      style={{ postion: "relative", left: "70%" }}
+                    >
+                      x
+                    </Button>
                   ) : (
                     ""
                   )}
@@ -120,7 +179,9 @@ const Feed = () => {
                   <FlexWrapper>
                     <img src={photo.url} width="60%" alt={photo.title} />
                   </FlexWrapper>
-                  {comments ? getCommentsForPhoto(photo._id) : ""}
+                  <div>Liked By:</div>
+                  {/* put last like of the array and then show the other in number of likes, make sure u can like dislike */}
+                  {commentsForRender ? getCommentsForPhoto(photo._id) : ""}
                   <br />
                   <br />
                   <form>
@@ -132,6 +193,15 @@ const Feed = () => {
                     />
                     <input type="submit" onClick={uploadNewComment(photo)} />
                   </form>
+                  {checkIfLiked(photo) ? (
+                    <LikeBtn onClick={() => changeLike(photo)} liked={true}>
+                      <LikeIcon />
+                    </LikeBtn>
+                  ) : (
+                    <LikeBtn onClick={() => changeLike(photo)} liked={false}>
+                      <LikeIcon />
+                    </LikeBtn>
+                  )}
                 </CardContent>
               </Card>
             );
@@ -155,4 +225,33 @@ const FlexWrapper = styled.div`
   justify-content: center;
   align-items: center;
   color: red;
+`;
+
+const CommentWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 20%);
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 2.5vh;
+`;
+
+const ProfilePhoto = styled.img`
+  /* height: 100%; */
+  width: 60%;
+  border: 1px solid black;
+  border-radius: 50%;
+`;
+
+const LikeIcon = styled(ThumbsUp)`
+  height: 100%;
+  width: 100%;
+`;
+
+const LikeBtn = styled.div`
+  color: ${(props) => (props.liked ? "blue" : "rgba(210, 225, 243, 1)")};
+  height: 18%;
+  width: 18%;
+  position: relative;
+  left: 70%;
+  cursor: pointer;
 `;
