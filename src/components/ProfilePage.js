@@ -7,95 +7,81 @@ import * as Api from "./Api";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
+import Feed from "./Feed";
+import Divider from "@material-ui/core/Divider";
 
 const ProfilePage = () => {
-  const { currentUser } = useContext(Insta_Context);
-  const [photos, set_photos] = useState([]);
-  const [comments, set_comments] = useState([]);
-  const [newComment, set_newComment] = useState("");
-  const inputRef = useRef();
+  const {
+    currentUser,
+    userProfileDisplay,
+    photos,
+    follows,
+    set_follows,
+  } = useContext(Insta_Context);
+
+  const [photosForFeed, set_photosForFeed] = useState([]);
+  // const [userToShow, set_userToShow] = useState();
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      if (currentUser) {
-        const fetchedPhotos = await Api.getPhotosByUser(currentUser);
-        set_photos(fetchedPhotos);
-        const fetchedComments = await Api.getComments();
-        set_comments(fetchedComments);
-      }
+    const getPhotosForFeed = () => {
+      console.log("userDisplay from autoComplete from useEffect");
+      console.log(userProfileDisplay);
+      const result = photos.filter(
+        (photo) => photo.user._id === userProfileDisplay._id
+      );
+      return result;
     };
-    fetchPosts();
-  }, [comments]);
+    const filteredPhotos = getPhotosForFeed();
+    set_photosForFeed(filteredPhotos);
+    // set_userToShow(userProfileDisplay);
+  }, [userProfileDisplay]);
 
-  const getCommentsForPhoto = (photo) => {
-    const allComments = comments;
-    const commentsForPhoto = allComments.filter(
-      (comment) => comment.photo === photo
+  console.log("userDisplay from autoComplete");
+  console.log(userProfileDisplay);
+
+  const checkIfFollow = () => {
+    const ifFollow = follows.filter(
+      (follow) => follow.followingUser._id === currentUser._id
     );
-    // console.log(commentsForPhoto);
-    return commentsForPhoto.map((comment) => {
-      return (
-        <>
-          <div>{comment.comment}</div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => deleteComment(comment._id)}
-          >
-            x
-          </Button>
-        </>
-      );
-    });
+    console.log("if follow array is");
+    console.log(ifFollow);
+    if (ifFollow.length === 0) return false;
+    else return true;
   };
 
-  const deleteComment = async (commentId) => {
-    const requestOptions = { method: "DELETE" };
-    try {
-      await fetch(
-        `http://localhost:8080/comments/${commentId}`,
-        requestOptions
-      );
-    } catch (err) {
-      console.log(err);
-    }
+  const getFollowId = (followingUserId, userId) => {
+    const follow = follows.filter(
+      (follow) =>
+        follow.followingUser._id === followingUserId &&
+        follow.user._id === userId
+    );
+    return follow[0]._id;
   };
 
-  const uploadNewComment = (photo) => async (e) => {
-    e.preventDefault();
-    console.log("newComment" + newComment);
-    console.log("submit clicked");
-    if (newComment) {
-      console.log("new Comment is true");
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user: photo.user,
-          commentedUser: currentUser,
-          photo: photo,
-          comment: newComment,
-        }),
-      };
-      try {
-        const response = await fetch(
-          "http://localhost:8080/comments",
-          requestOptions
-        );
-        console.log("uploaded comment");
-        inputRef.current.value = "";
-      } catch (err) {
-        console.log(err);
-      }
+  const changeFollow = async () => {
+    if (!checkIfFollow()) {
+      await Api.postFollow(userProfileDisplay, currentUser);
+      const newFollows = await Api.getFollows();
+      set_follows(newFollows);
+    } else {
+      const follow = getFollowId(currentUser._id, userProfileDisplay._id);
+      await Api.deleteFollow(follow);
+      const newFollows = await Api.getFollows();
+      set_follows(newFollows);
     }
   };
 
   return (
     <Grid>
       <HomeTopBar />
-      {/* <ProfileName>Erez Poliak</ProfileName> */}
       <Profile>
-        <ProfilePic src={currentUser ? currentUser.profilePhoto : ""} />
+        <ProfilePic
+          src={
+            userProfileDisplay && userProfileDisplay.profilePhoto
+              ? userProfileDisplay.profilePhoto
+              : ""
+          }
+        />
         <ProfileStatsWrapper>
           <div>3</div>
           <div>Posts</div>
@@ -110,58 +96,33 @@ const ProfilePage = () => {
         </ProfileStatsWrapper>
       </Profile>
       <Bio>
-        <h2>{currentUser ? currentUser.userName : ""}</h2>
-        {currentUser ? currentUser.bio : ""}
+        <h2>{userProfileDisplay ? userProfileDisplay.userName : ""}</h2>
+        {userProfileDisplay ? userProfileDisplay.bio : ""}
       </Bio>
-      <EditProfile to="/edit-profile">Edit Profile</EditProfile>
-      <Feed>
-        {photos && currentUser
-          ? photos.map((photo) => {
-              return (
-                <Card
-                  style={{ height: "60vh", width: "20vw", overflow: "scroll" }}
-                  variant="outlined"
-                  id={photo._id}
-                >
-                  <CardContent>
-                    {/* <input
-                      style={{ position: "relative", left: "60%" }}
-                      type="submit"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        Api.deletePhotoByPhotoId(photo._id);
-                      }}
-                    /> */}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => Api.deletePhotoByPhotoId(photo._id)}
-                      style={{ postion: "relative", left: "70%" }}
-                    >
-                      x
-                    </Button>
-                    <h1 style={{ textAlign: "center" }}>{photo.title}</h1>
-                    <FlexWrapper>
-                      <img src={photo.url} width="60%" alt={photo.title} />
-                    </FlexWrapper>
-                    {comments ? getCommentsForPhoto(photo) : ""}
-                    <br />
-                    <br />
-                    <form>
-                      <label>Add a comment</label>
-                      <input
-                        type="text"
-                        onChange={(e) => set_newComment(e.target.value)}
-                        ref={inputRef}
-                      />
-                      <input type="submit" onClick={uploadNewComment(photo)} />
-                    </form>
-                  </CardContent>
-                </Card>
-              );
-            })
-          : ""}
-      </Feed>
+      {currentUser &&
+      userProfileDisplay &&
+      currentUser._id !== userProfileDisplay._id ? (
+        <Button
+          variant="contained"
+          // color={checkIfFollow() ? "primary" : "default"}
+          color="primary"
+          style={{ width: "23%", postion: "relative", left: "70%" }}
+          onClick={() => changeFollow()}
+        >
+          {checkIfFollow() ? "Unfollow" : "follow"}
+        </Button>
+      ) : (
+        ""
+      )}
+      {currentUser &&
+      userProfileDisplay &&
+      currentUser._id === userProfileDisplay._id ? (
+        <EditProfile to="/edit-profile">Edit Profile</EditProfile>
+      ) : (
+        ""
+      )}
+      <Divider />
+      <Feed photosForFeed={photosForFeed} />
     </Grid>
   );
 };
@@ -216,8 +177,6 @@ const EditProfile = styled(Link)`
   align-items: center;
   padding: 4vh;
 `;
-
-const Feed = styled.div``;
 
 const FlexWrapper = styled.div`
   display: flex;

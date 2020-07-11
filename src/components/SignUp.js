@@ -10,7 +10,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
-  const { set_currentUser } = useContext(Insta_Context);
+  const { set_currentUser, set_userProfileDisplay } = useContext(Insta_Context);
 
   const signUp = async () => {
     try {
@@ -29,6 +29,7 @@ const SignUp = () => {
       );
       const result = await response.json();
       set_currentUser(result);
+      set_userProfileDisplay(result);
     } catch (err) {
       alert(err);
     }

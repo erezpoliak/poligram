@@ -28,6 +28,7 @@ const CommentSection = ({ photo }) => {
                     ? comment.commentedUser.profilePhoto
                     : ""
                 }
+                display={comment.commentedUser.profilePhoto}
               />
             </FlexWrapper>
             <div style={{ fontWeight: "900" }}>
@@ -47,7 +48,10 @@ const CommentSection = ({ photo }) => {
         return (
           <CommentWrapper>
             <FlexWrapper>
-              <ProfilePhoto src={comment.commentedUser.profilePhoto} />
+              <ProfilePhoto
+                src={comment.commentedUser.profilePhoto}
+                display={comment.commentedUser.profilePhoto}
+              />
             </FlexWrapper>
             <div style={{ fontWeight: "900" }}>
               {comment.commentedUser.userName}
@@ -113,4 +117,5 @@ const ProfilePhoto = styled.img`
   width: 60%;
   border: 1px solid black;
   border-radius: 50%;
+  display: ${(props) => (props.display ? "block" : "none")};
 `;

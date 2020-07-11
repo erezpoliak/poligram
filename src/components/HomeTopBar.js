@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import AutoCompleteSearch from "./AutoCompleteSearch";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -7,21 +7,33 @@ import HomeIcon from "@material-ui/icons/Home";
 import CameraBtn from "./CameraBtn";
 import AccountMenu from "./AccountMenu";
 import { Link } from "react-router-dom";
+import { Insta_Context } from "./Context";
 
 const HomeTopBar = () => {
+  const { set_userProfileDisplay, currentUser } = useContext(Insta_Context);
+
   return (
     <Container>
-      <LinkWrapper to="/home">
+      <LinkWrapper
+        to="/home"
+        onClick={() => set_userProfileDisplay(currentUser)}
+      >
         <Title>Poligram</Title>
       </LinkWrapper>
       <FlexWrapper>
         <AutoCompleteSearch />
       </FlexWrapper>
       <IconWrapper>
-        <LinkWrapper to="/upload">
+        <LinkWrapper
+          to="/upload"
+          onClick={() => set_userProfileDisplay(currentUser)}
+        >
           <CameraBtn size="large" />
         </LinkWrapper>
-        <HomeWrapper to="/home">
+        <HomeWrapper
+          to="/home"
+          onClick={() => set_userProfileDisplay(currentUser)}
+        >
           <HomeIcon size="large" />
         </HomeWrapper>
         <NotificationWrapper>

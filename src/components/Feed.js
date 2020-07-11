@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import { ThumbsUp } from "@styled-icons/fa-solid/ThumbsUp";
 import CommentSection from "./CommentSection";
 
-const Feed = () => {
+const Feed = ({ photosForFeed }) => {
   const {
     currentUser,
     photos,
@@ -42,6 +42,13 @@ const Feed = () => {
     }
   };
 
+  const getLikedByPhotoAndUserId = (photoId, userId) => {
+    const result = likes.filter(
+      (like) => like.user._id === userId && like.photo._id === photoId
+    );
+    return result;
+  };
+
   const changeLike = async (photo) => {
     console.log("went inside changeLike fn");
     const isLiked = checkIfLiked(photo);
@@ -51,6 +58,7 @@ const Feed = () => {
         currentUser._id,
         photo._id
       );
+      // const like = getLikedByPhotoAndUserId(photo._id, currentUser._id);
       const likeId = like[0]._id;
       await Api.deleteLike(likeId);
       const newLikes = await Api.getLikes();
@@ -83,8 +91,8 @@ const Feed = () => {
 
   return (
     <Container>
-      {photos && currentUser
-        ? photos.map((photo) => {
+      {photos && currentUser && photosForFeed
+        ? photosForFeed.map((photo) => {
             return (
               <Card
                 style={{

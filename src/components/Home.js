@@ -9,51 +9,32 @@ import { Insta_Context } from "./Context";
 import fire from "./config/Fire";
 
 const Home = () => {
-  const [msgs, setMsgs] = useState([]);
-  const [msg, setMsg] = useState("");
-  const { currentUser, set_currentUser } = useContext(Insta_Context);
-  const [answered, set_answered] = useState(false);
+  const { currentUser, set_currentUser, follows, photos } = useContext(
+    Insta_Context
+  );
 
-  const fetchMsgs = async () => {
-    const msgs = await fetch("http://localhost:8080/messages");
-    const result = await msgs.json();
-    setMsgs(result);
-  };
+  const [photosForFeed, set_photosForFeed] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchMsgs();
+    const getPhotosForFeed = () => {
+      const selectedFollows = follows.filter(
+        (follow) => follow.followingUser._id === currentUser._id
+      );
+      console.log("users u currently follow");
+      console.log(selectedFollows);
+      const usersYouFollow = selectedFollows.map((follow) => follow.user);
+      const result = [];
+      usersYouFollow.map((user) => {
+        photos
+          .filter((photo) => photo.user._id === user._id)
+          .map((photo) => result.push(photo));
+      });
+      return result;
     };
-    fetchData();
-    // if (!currentUser) set_currentUser(fire.auth().currentUser);
+
+    const selectedPhotos = getPhotosForFeed();
+    set_photosForFeed(selectedPhotos);
   }, []);
-
-  const uploadMsg = async (e) => {
-    e.preventDefault();
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: msg }),
-    };
-    const response = await fetch(
-      "http://localhost:8080/messages",
-      requestOptions
-    );
-    const jsoned = await response.json();
-    console.log("response");
-    console.log(jsoned);
-    await fetchMsgs();
-  };
-
-  console.log("current user from home");
-  console.log(currentUser);
-
-  const uploadProfilePic = () => {
-    const answer = window.confirm(
-      "u seem to have no profile pic, wanna upload one"
-    );
-    if (!answer) set_answered(true);
-  };
 
   return (
     <>
@@ -69,7 +50,7 @@ const Home = () => {
             </Button>
           </PostLink>
         </Description>
-        <Feed />
+        <Feed photosForFeed={photosForFeed} />
       </Grid>
       {/* // ) : ( // window.confirm("upload a profile photo?") // )} */}
     </>

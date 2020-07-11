@@ -30,9 +30,9 @@ export async function getComments() {
   }
 }
 
-export async function getPhotosByUser(user) {
+export async function getPhotosByUserId(userId) {
   try {
-    const url = `http://localhost:8080/photos/${user}`;
+    const url = `http://localhost:8080/photos/${userId}`;
     const response = await fetch(url);
     const jsoned = await response.json();
     return jsoned;
@@ -159,6 +159,44 @@ export const getUsers = async () => {
     const response = await fetch(url);
     const result = await response.json();
     return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getFollows = async () => {
+  const url = `http://localhost:8080/follows`;
+  try {
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const postFollow = async (user, followingUser) => {
+  const url = `http://localhost:8080/follows`;
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user,
+      followingUser,
+    }),
+  };
+  try {
+    await fetch(url, requestOptions);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteFollow = async (followId) => {
+  const url = `http://localhost:8080/${followId}`;
+  const requestOptions = { method: "DELETE" };
+  try {
+    await fetch(url, requestOptions);
   } catch (err) {
     console.log(err);
   }

@@ -12,6 +12,8 @@ const Insta_Provider = ({ children }) => {
   const [comments, set_comments] = useState([]);
   const [likes, set_likes] = useState([]);
   const [redirect, set_redirect] = useState("/home");
+  const [follows, set_follows] = useState([]);
+  const [userProfileDisplay, set_userProfileDisplay] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,8 @@ const Insta_Provider = ({ children }) => {
       set_likes(fetchedLikes);
       const fetchedUsers = await Api.getUsers();
       set_users(fetchedUsers);
+      const fetchedFollows = await Api.getFollows();
+      set_follows(fetchedFollows);
     };
     fetchData();
   }, []);
@@ -35,6 +39,8 @@ const Insta_Provider = ({ children }) => {
     comments,
     likes,
     redirect,
+    follows,
+    userProfileDisplay,
   };
   const actions = {
     set_users,
@@ -44,6 +50,8 @@ const Insta_Provider = ({ children }) => {
     set_comments,
     set_likes,
     set_redirect,
+    set_follows,
+    set_userProfileDisplay,
   };
 
   return <Provider value={{ ...state, ...actions }}>{children}</Provider>;

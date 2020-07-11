@@ -12,7 +12,12 @@ import EditProfilePage from "./EditProfilePage";
 
 const App = () => {
   // const [user, setUser] = useState({});
-  const { set_currentUser, currentUser, redirect } = useContext(Insta_Context);
+  const {
+    set_currentUser,
+    currentUser,
+    redirect,
+    set_userProfileDisplay,
+  } = useContext(Insta_Context);
   const [email, setEmail] = useState("");
   const [usersApi, set_usersApi] = useState({});
   const [msgsApi, set_msgsApi] = useState({});
@@ -23,6 +28,7 @@ const App = () => {
       // await fetchUsers();
       // await fetchMsgs();
       await fetchCurrentUser();
+      // set_userProfileDisplay(currentUser);
     };
     fetchData();
   }, [email]);
@@ -47,18 +53,6 @@ const App = () => {
     });
   };
 
-  const fetchUsers = async () => {
-    const response = await fetch(`http://localhost:8080/users`);
-    const result = await response.json();
-    set_usersApi(result);
-  };
-
-  const fetchMsgs = async () => {
-    const response = await fetch(`http://localhost:8080/messages`);
-    const result = await response.json();
-    set_msgsApi(result);
-  };
-
   const fetchCurrentUser = async () => {
     if (email !== "") {
       console.log("email from fn app" + email);
@@ -68,6 +62,7 @@ const App = () => {
         console.log("current user from fetchCurrentUser");
         console.log(result);
         set_currentUser(result);
+        set_userProfileDisplay(result);
       } else set_currentUser();
     } else console.log("emnail is empty");
   };
@@ -94,7 +89,7 @@ const App = () => {
       <Route path="/edit-profile" component={EditProfilePage} />
 
       {/* {user ? <Home /> : <Login />} */}
-      {currentUser ? <Redirect to={redirect} /> : <Redirect to="/login" />}
+      {currentUser ? <Redirect to={"/home"} /> : <Redirect to="/login" />}
     </Router>
   );
 };

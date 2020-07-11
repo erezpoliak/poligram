@@ -9,7 +9,7 @@ import { Insta_Context } from "./Context";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { set_currentUser } = useContext(Insta_Context);
+  const { set_currentUser, set_userProfileDisplay } = useContext(Insta_Context);
 
   const login = async () => {
     try {
@@ -17,6 +17,7 @@ const Login = () => {
       const currentUser = await fetch(`http://localhost:8080/users/${email}`);
       const jsoned = await currentUser.json();
       set_currentUser(jsoned);
+      set_userProfileDisplay(jsoned);
     } catch (err) {
       alert(err);
     }
