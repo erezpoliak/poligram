@@ -97,12 +97,13 @@ export default Post;
 const Grid = styled.div`
   display: grid;
   grid-template-rows: 12vh 88vh;
+  background: #37474f;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 

@@ -8,34 +8,59 @@ import CameraBtn from "./CameraBtn";
 import AccountMenu from "./AccountMenu";
 import { Link } from "react-router-dom";
 import { Insta_Context } from "./Context";
+import { useHistory } from "react-router-dom";
 
 const HomeTopBar = () => {
   const { set_userProfileDisplay, currentUser } = useContext(Insta_Context);
+  const history = useHistory();
 
   return (
     <Container>
-      <LinkWrapper
+      {/* <LinkWrapper
         to="/home"
         onClick={() => set_userProfileDisplay(currentUser)}
-      >
-        <Title>Poligram</Title>
-      </LinkWrapper>
+      > */}
+      <FlexWrapper>
+        <Title
+          onClick={() => {
+            set_userProfileDisplay(currentUser);
+            history.push("/home");
+          }}
+        >
+          Poligram
+        </Title>
+      </FlexWrapper>
+      {/* </LinkWrapper> */}
       <FlexWrapper>
         <AutoCompleteSearch />
       </FlexWrapper>
       <IconWrapper>
-        <LinkWrapper
+        {/* <LinkWrapper
           to="/upload"
           onClick={() => set_userProfileDisplay(currentUser)}
+        > */}
+        <FlexWrapper
+          onClick={() => {
+            set_userProfileDisplay(currentUser);
+            history.push("/upload");
+          }}
         >
           <CameraBtn size="large" />
-        </LinkWrapper>
-        <HomeWrapper
+        </FlexWrapper>
+        {/* </LinkWrapper> */}
+        {/* <HomeWrapper
           to="/home"
           onClick={() => set_userProfileDisplay(currentUser)}
+        > */}
+        <FlexWrapper
+          onClick={() => {
+            set_userProfileDisplay(currentUser);
+            history.push("/home");
+          }}
         >
           <HomeIcon size="large" />
-        </HomeWrapper>
+        </FlexWrapper>
+        {/* </HomeWrapper> */}
         <NotificationWrapper>
           <NotificationsIcon size="large" />
         </NotificationWrapper>
@@ -65,6 +90,7 @@ const Title = styled.h1`
   color: rgba(210, 225, 243, 1);
   display: flex;
   align-items: center;
+  cursor: pointer;
   // margin-left: 97%;
   /* padding-left: 13%; */
 `;
@@ -74,6 +100,7 @@ const FlexWrapper = styled.div`
   justify-content: center;
   align-items: center;
   color: rgba(210, 225, 243, 1);
+  cursor: pointer;
 `;
 
 const IconWrapper = styled.div`

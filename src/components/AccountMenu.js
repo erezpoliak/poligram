@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Insta_Context } from "./Context";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import fire from "./config/Fire";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ProfilePage from "./ProfilePage";
 import styled from "styled-components";
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const history = useHistory();
+
+  const { set_userProfileDisplay, currentUser } = useContext(Insta_Context);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,9 +43,16 @@ const AccountMenu = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <ProfileLink to="/profile">
-          <MenuItem>Profile</MenuItem>
-        </ProfileLink>
+        {/* <ProfileLink to="/profile"> */}
+        <MenuItem
+          onClick={() => {
+            set_userProfileDisplay(currentUser);
+            history.push("/profile");
+          }}
+        >
+          Profile
+        </MenuItem>
+        {/* </ProfileLink> */}
         {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
         <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>

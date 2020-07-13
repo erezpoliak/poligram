@@ -3,11 +3,13 @@ import styled from "styled-components";
 import { Insta_Context } from "./Context";
 import Button from "@material-ui/core/Button";
 import * as Api from "./Api";
+import { makeStyles } from "@material-ui/core/styles";
 
 const CommentSection = ({ photo }) => {
   const inputRef = useRef();
   const { comments, set_comments, currentUser } = useContext(Insta_Context);
   const [newComment, set_newComment] = useState("");
+  const classes = useStyles();
 
   const getCommentsForPhoto = (photo) => {
     const commentsForPhoto = comments.filter(
@@ -31,7 +33,7 @@ const CommentSection = ({ photo }) => {
                 display={comment.commentedUser.profilePhoto}
               />
             </FlexWrapper>
-            <div style={{ fontWeight: "900" }}>
+            <div style={{ fontWeight: "900", wordBreak: "break-word" }}>
               {comment.commentedUser.userName}
             </div>
             <div>{comment.comment}</div>
@@ -39,6 +41,7 @@ const CommentSection = ({ photo }) => {
               variant="contained"
               color="primary"
               onClick={() => deleteComment(comment._id)}
+              className={classes.btn}
             >
               x
             </Button>
@@ -53,7 +56,7 @@ const CommentSection = ({ photo }) => {
                 display={comment.commentedUser.profilePhoto}
               />
             </FlexWrapper>
-            <div style={{ fontWeight: "900" }}>
+            <div style={{ fontWeight: "900", wordBreak: "break-word" }}>
               {comment.commentedUser.userName}
             </div>
             <div>{comment.comment}</div>
@@ -119,3 +122,11 @@ const ProfilePhoto = styled.img`
   border-radius: 50%;
   display: ${(props) => (props.display ? "block" : "none")};
 `;
+
+const useStyles = makeStyles({
+  btn: {
+    // height: "100%",
+    width: "100%",
+    minWidth: "0",
+  },
+});

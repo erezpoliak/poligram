@@ -193,7 +193,7 @@ export const postFollow = async (user, followingUser) => {
 };
 
 export const deleteFollow = async (followId) => {
-  const url = `http://localhost:8080/${followId}`;
+  const url = `http://localhost:8080/follows/${followId}`;
   const requestOptions = { method: "DELETE" };
   try {
     await fetch(url, requestOptions);

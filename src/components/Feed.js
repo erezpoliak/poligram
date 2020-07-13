@@ -7,6 +7,7 @@ import { Insta_Context } from "./Context";
 import Button from "@material-ui/core/Button";
 import { ThumbsUp } from "@styled-icons/fa-solid/ThumbsUp";
 import CommentSection from "./CommentSection";
+import { makeStyles } from "@material-ui/core/styles";
 
 const Feed = ({ photosForFeed }) => {
   const {
@@ -18,6 +19,8 @@ const Feed = ({ photosForFeed }) => {
     likes,
     set_likes,
   } = useContext(Insta_Context);
+
+  const classes = useStyles();
 
   const deletePhoto = async (photoId) => {
     await Api.deletePhotoByPhotoId(photoId);
@@ -77,7 +80,7 @@ const Feed = ({ photosForFeed }) => {
     return (
       <LikedByGrid>
         <div>Liked By:</div>
-        <div>
+        <div style={{ wordBreak: "break-word" }}>
           {lastLike && lastLike.userWhoLikedIt
             ? lastLike.userWhoLikedIt.userName
             : ""}
@@ -94,22 +97,15 @@ const Feed = ({ photosForFeed }) => {
       {photos && currentUser && photosForFeed
         ? photosForFeed.map((photo) => {
             return (
-              <Card
-                style={{
-                  height: "60vh",
-                  width: "20vw",
-                  overflow: "scroll",
-                }}
-                variant="outlined"
-                id={photo._id}
-              >
+              <Card className={classes.card} variant="outlined" id={photo._id}>
                 <CardContent>
                   {photo.user._id === currentUser._id ? (
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => deletePhoto(photo._id)}
-                      style={{ postion: "relative", left: "70%" }}
+                      // style={{ postion: "relative", left: "70%" }}
+                      className={classes.btn}
                     >
                       x
                     </Button>
@@ -144,6 +140,9 @@ const Container = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   padding: 4vh;
+  /* background: #37474f;
+   */
+  background: linear-gradient(#546e7a, #37474f);
 `;
 
 const FlexWrapper = styled.div`
@@ -188,4 +187,29 @@ const LikedByGrid = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 900;
+  grid-gap: 6.5%;
 `;
+
+const useStyles = makeStyles((theme) => ({
+  card: {
+    // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7))",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(0,0,0,0.9)",
+    color: "white",
+    height: "60vh",
+    width: "20vw",
+    overflow: "scroll",
+    [theme.breakpoints.down(750)]: {
+      height: "40vh",
+      width: "40vw",
+    },
+  },
+  btn: {
+    position: "relative",
+    left: "70%",
+    height: "100%",
+    width: "30%",
+  },
+}));

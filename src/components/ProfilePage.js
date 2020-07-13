@@ -65,10 +65,26 @@ const ProfilePage = () => {
       set_follows(newFollows);
     } else {
       const follow = getFollowId(currentUser._id, userProfileDisplay._id);
+      console.log("follow from changeFollow fn");
+      console.log(follow);
       await Api.deleteFollow(follow);
       const newFollows = await Api.getFollows();
       set_follows(newFollows);
     }
+  };
+
+  const getFollowers = () => {
+    const selectedFollows = follows.filter(
+      (follow) => follow.user._id === userProfileDisplay._id
+    );
+    return selectedFollows.length;
+  };
+
+  const getFollowing = () => {
+    const selectedFollows = follows.filter(
+      (follow) => follow.followingUser._id === userProfileDisplay._id
+    );
+    return selectedFollows.length;
   };
 
   return (
@@ -87,11 +103,11 @@ const ProfilePage = () => {
           <div>Posts</div>
         </ProfileStatsWrapper>
         <ProfileStatsWrapper>
-          <div>3</div>
+          <div>{getFollowers()}</div>
           <div>Followers</div>
         </ProfileStatsWrapper>
         <ProfileStatsWrapper>
-          <div>3</div>
+          <div>{getFollowing()}</div>
           <div>Following</div>
         </ProfileStatsWrapper>
       </Profile>
@@ -133,6 +149,7 @@ const Grid = styled.div`
   display: grid;
   grid-template-rows: 12vh 25vh;
   color: black;
+  background: linear-gradient(#e0e0e0, #424242);
   grid-gap: 4vh;
 `;
 
