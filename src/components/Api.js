@@ -231,7 +231,9 @@ export const uploadUser = async (userName, email, password) => {
     }),
   };
   try {
-    await fetch(url, requestOptions);
+    const response = await fetch(url, requestOptions);
+    const result = response.json();
+    return result;
   } catch (err) {
     console.log(err);
   }

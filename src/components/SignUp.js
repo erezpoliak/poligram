@@ -16,9 +16,8 @@ const SignUp = () => {
   const signUp = async () => {
     try {
       const response = await Api.uploadUser(userName, email, password);
-      const result = await response.json();
-      set_currentUser(result);
-      set_userProfileDisplay(result);
+      set_currentUser(response);
+      set_userProfileDisplay(response);
     } catch (err) {
       alert(err);
     }

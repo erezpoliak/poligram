@@ -36,13 +36,12 @@ const Post = () => {
         console.log("seccesfully uploaded image");
         console.log("url from uploaded image " + url);
         try {
-          const response = await Api.postPhoto(url, title, currentUser);
+          await Api.postPhoto(url, title, currentUser);
           console.log("successfully uploaded post");
           alert("successfully uploaded post");
           set_photo();
           const newPhotos = await Api.getPhotos();
           set_photos(newPhotos);
-          return response;
         } catch (err) {
           console.log(err);
         }
