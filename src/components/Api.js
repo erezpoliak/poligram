@@ -10,13 +10,13 @@ export async function getPhotos() {
   }
 }
 
-export const postPhoto = async (url, title, currentUser) => {
+export const postPhoto = async (photoUrl, title, currentUser) => {
   const url = `${API}/photos`;
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      url: url,
+      url: photoUrl,
       title: title,
       user: currentUser,
     }),
@@ -248,13 +248,13 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-export const changeUserProfilePhoto = async (url, userId) => {
+export const changeUserProfilePhoto = async (photoUrl, userId) => {
   const url = `${API}/users/${userId}`;
   const requestOptions = {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      profilePhoto: url,
+      profilePhoto: photoUrl,
     }),
   };
   try {

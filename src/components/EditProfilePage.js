@@ -55,7 +55,7 @@ const EditProfilePage = () => {
           const updatedUser = await Api.getUserByEmail(currentUser.email);
           alert("succesfully updated photo!");
           set_photo("");
-          set_currentUser(updated);
+          set_currentUser(updatedUser);
         } catch (err) {
           console.log(err);
           alert("failed to upload photo");
