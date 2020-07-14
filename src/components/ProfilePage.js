@@ -20,7 +20,6 @@ const ProfilePage = () => {
   } = useContext(Insta_Context);
 
   const [photosForFeed, set_photosForFeed] = useState([]);
-  // const [userToShow, set_userToShow] = useState();
 
   useEffect(() => {
     const getPhotosForFeed = () => {
