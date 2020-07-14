@@ -16,10 +16,6 @@ const HomeTopBar = () => {
 
   return (
     <Container>
-      {/* <LinkWrapper
-        to="/home"
-        onClick={() => set_userProfileDisplay(currentUser)}
-      > */}
       <FlexWrapper>
         <Title
           onClick={() => {
