@@ -14,19 +14,7 @@ const SignUp = () => {
 
   const signUp = async () => {
     try {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userName: userName,
-          email: email,
-          password: password,
-        }),
-      };
-      const response = await fetch(
-        "http://localhost:8080/users/",
-        requestOptions
-      );
+      const response = await Api.uploadUser(userName, email, password);
       const result = await response.json();
       set_currentUser(result);
       set_userProfileDisplay(result);

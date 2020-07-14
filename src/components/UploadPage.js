@@ -35,20 +35,8 @@ const Post = () => {
           .getDownloadURL();
         console.log("seccesfully uploaded image");
         console.log("url from uploaded image " + url);
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url: url,
-            title: title,
-            user: currentUser,
-          }),
-        };
         try {
-          const response = await fetch(
-            "http://localhost:8080/photos/",
-            requestOptions
-          );
+          const response = await Api.postPhoto(url, title, currentUser);
           console.log("successfully uploaded post");
           alert("successfully uploaded post");
           set_photo();

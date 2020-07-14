@@ -9,6 +9,7 @@ import UploadPage from "./UploadPage";
 import { Insta_Context } from "./Context";
 import ProfilePage from "./ProfilePage";
 import EditProfilePage from "./EditProfilePage";
+import * as Api from "./Api";
 
 const App = () => {
   // const [user, setUser] = useState({});
@@ -56,13 +57,12 @@ const App = () => {
   const fetchCurrentUser = async () => {
     if (email !== "") {
       console.log("email from fn app" + email);
-      const response = await fetch(`http://localhost:8080/users/${email}`);
+      const response = await Api.getUserByEmail(email);
       if (response !== "") {
-        const result = await response.json();
         console.log("current user from fetchCurrentUser");
-        console.log(result);
-        set_currentUser(result);
-        set_userProfileDisplay(result);
+        console.log(response);
+        set_currentUser(response);
+        set_userProfileDisplay(response);
       } else set_currentUser();
     } else console.log("emnail is empty");
   };

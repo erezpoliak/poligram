@@ -10,6 +10,24 @@ export async function getPhotos() {
   }
 }
 
+export const postPhoto = async (url, title, currentUser) => {
+  const url = `${API}/photos`;
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      url: url,
+      title: title,
+      user: currentUser,
+    }),
+  };
+  try {
+    await fetch(url, requestOptions);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export async function getCommnetsByPhotoId(photoId) {
   try {
     const url = `${API}/comments/photos/${photoId}`;
@@ -194,6 +212,67 @@ export const postFollow = async (user, followingUser) => {
 export const deleteFollow = async (followId) => {
   const url = `${API}/follows/${followId}`;
   const requestOptions = { method: "DELETE" };
+  try {
+    await fetch(url, requestOptions);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const uploadUser = async (userName, email, password) => {
+  const url = `${API}/users`;
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userName: userName,
+      email: email,
+      password: password,
+    }),
+  };
+  try {
+    await fetch(url, requestOptions);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getUserByEmail = async (email) => {
+  const url = `${API}/users/${email}`;
+  try {
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const changeUserProfilePhoto = async (url, userId) => {
+  const url = `${API}/users/${userId}`;
+  const requestOptions = {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      profilePhoto: url,
+    }),
+  };
+  try {
+    await fetch(url, requestOptions);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const changeUserBio = async (bio, userId) => {
+  const url = `${API}/users/${userId}`;
+  const requestOptions = {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bio: bio,
+    }),
+  };
   try {
     await fetch(url, requestOptions);
   } catch (err) {

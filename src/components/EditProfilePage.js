@@ -7,6 +7,7 @@ import { Insta_Context } from "./Context";
 import { storage } from "./config/Fire";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
+import * as Api from "./Api";
 
 const EditProfilePage = () => {
   const [editPic, set_editPic] = useState(false);
@@ -35,25 +36,26 @@ const EditProfilePage = () => {
           .ref("images")
           .child(photo.name)
           .getDownloadURL();
-        const requestOptions = {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            profilePhoto: url,
-          }),
-        };
+        // const requestOptions = {
+        //   method: "PATCH",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     profilePhoto: url,
+        //   }),
+        // };
         try {
-          await fetch(
-            `http://localhost:8080/users/${currentUser._id}`,
-            requestOptions
-          );
-          const updatedUser = await fetch(
-            `http://localhost:8080/users/${currentUser.email}`
-          );
+          // await fetch(
+          //   `http://localhost:8080/users/${currentUser._id}`,
+          //   requestOptions
+          // );
+          // const updatedUser = await fetch(
+          //   `http://localhost:8080/users/${currentUser.email}`
+          // );
+          await Api.changeUserProfilePhoto(url, currentUser._id);
+          const updatedUser = await Api.getUserByEmail(currentUser.email);
           alert("succesfully updated photo!");
           set_photo("");
-          const userJson = await updatedUser.json();
-          set_currentUser(userJson);
+          set_currentUser(updated);
         } catch (err) {
           console.log(err);
           alert("failed to upload photo");
@@ -63,23 +65,25 @@ const EditProfilePage = () => {
   };
 
   const updateBio = async () => {
-    const requestOptions = {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        bio: bio,
-      }),
-    };
+    // const requestOptions = {
+    //   method: "PATCH",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     bio: bio,
+    //   }),
+    // };
     try {
-      await fetch(
-        `http://localhost:8080/users/${currentUser._id}`,
-        requestOptions
-      );
-      const updatedUser = await fetch(
-        `http://localhost:8080/users/${currentUser.email}`
-      );
-      const userJson = await updatedUser.json();
-      set_currentUser(userJson);
+      // await fetch(
+      //   `http://localhost:8080/users/${currentUser._id}`,
+      //   requestOptions
+      // );
+      // const updatedUser = await fetch(
+      //   `http://localhost:8080/users/${currentUser.email}`
+      // );
+      // const userJson = await updatedUser.json();
+      await Api.changeUserBio(bio, currentUser._id);
+      const updatedUser = Api.getUserByEmail(currentUser.email);
+      set_currentUser(updatedUser);
       alert("succesfully updated bio!");
     } catch (err) {
       console.log(err);

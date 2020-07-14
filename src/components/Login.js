@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import fire from "./config/Fire";
 import { Insta_Context } from "./Context";
+import * as Api from "./Api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,10 +15,9 @@ const Login = () => {
   const login = async () => {
     try {
       await fire.auth().signInWithEmailAndPassword(email, password);
-      const currentUser = await fetch(`http://localhost:8080/users/${email}`);
-      const jsoned = await currentUser.json();
-      set_currentUser(jsoned);
-      set_userProfileDisplay(jsoned);
+      const currentUser = await Api.getUserByEmail(email);
+      set_currentUser(currentUser);
+      set_userProfileDisplay(currentUser);
     } catch (err) {
       alert(err);
     }
