@@ -23,6 +23,7 @@ const Feed = ({ photosForFeed }) => {
   const classes = useStyles();
 
   const deletePhoto = async (photoId) => {
+    console.log(photoId);
     await Api.deletePhotoByPhotoId(photoId);
     const newPhotos = await Api.getPhotos();
     set_photos(newPhotos);

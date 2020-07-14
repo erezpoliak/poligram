@@ -33,7 +33,7 @@ const ProfilePage = () => {
     const filteredPhotos = getPhotosForFeed();
     set_photosForFeed(filteredPhotos);
     // set_userToShow(userProfileDisplay);
-  }, [userProfileDisplay]);
+  }, [userProfileDisplay, photos]);
 
   console.log("userDisplay from autoComplete");
   console.log(userProfileDisplay);

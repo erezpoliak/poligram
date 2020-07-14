@@ -69,7 +69,7 @@ export async function deletePhotoByPhotoId(photoId) {
       method: "DELETE",
     };
     const response = await fetch(url, requestOptions);
-    // console.log("response from deletePghotoByPhotoId");
+    console.log("response from deletePghotoByPhotoId bla bla");
   } catch (err) {
     console.log(err);
   }
