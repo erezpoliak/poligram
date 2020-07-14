@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import fire from "./config/Fire";
 import { Insta_Context } from "./Context";
+import * as Api from "./Api";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
