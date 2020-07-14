@@ -1,6 +1,8 @@
+const API = process.env.API_URL;
+
 export async function getPhotos() {
   try {
-    const response = await fetch("http://localhost:8080/photos/");
+    const response = await fetch(`${API}/photos/`);
     const photos = await response.json();
     return photos;
   } catch (err) {
@@ -10,7 +12,7 @@ export async function getPhotos() {
 
 export async function getCommnetsByPhotoId(photoId) {
   try {
-    const url = `http://localhost:8080/comments/photos/${photoId}`;
+    const url = `${API}/comments/photos/${photoId}`;
     const response = await fetch(url);
     const jsoned = response.json();
     return jsoned;
@@ -21,7 +23,7 @@ export async function getCommnetsByPhotoId(photoId) {
 
 export async function getComments() {
   try {
-    const url = "http://localhost:8080/comments";
+    const url = `${API}/comments`;
     const response = await fetch(url);
     const jsoned = await response.json();
     return jsoned;
@@ -32,7 +34,7 @@ export async function getComments() {
 
 export async function getPhotosByUserId(userId) {
   try {
-    const url = `http://localhost:8080/photos/${userId}`;
+    const url = `${API}/photos/${userId}`;
     const response = await fetch(url);
     const jsoned = await response.json();
     return jsoned;
@@ -43,7 +45,7 @@ export async function getPhotosByUserId(userId) {
 
 export async function deletePhotoByPhotoId(photoId) {
   try {
-    const url = `http://localhost:8080/photos/${photoId}`;
+    const url = `${API}/photos/${photoId}`;
     const requestOptions = {
       method: "DELETE",
     };
@@ -56,7 +58,7 @@ export async function deletePhotoByPhotoId(photoId) {
 
 export async function getUserById(id) {
   try {
-    const url = `http://localhost:8080/users/id/${id}`;
+    const url = `${API}/users/id/${id}`;
     const response = await fetch(url);
     if (response) {
       const result = await response.json();
@@ -70,7 +72,7 @@ export async function getUserById(id) {
 export async function deleteComment(commentId) {
   const requestOptions = { method: "DELETE" };
   try {
-    await fetch(`http://localhost:8080/comments/${commentId}`, requestOptions);
+    await fetch(`${API}/comments/${commentId}`, requestOptions);
   } catch (err) {
     console.log(err);
   }
@@ -89,10 +91,7 @@ export const uploadNewComment = async (photo, newComment, currentUser) => {
       }),
     };
     try {
-      const response = await fetch(
-        "http://localhost:8080/comments",
-        requestOptions
-      );
+      const response = await fetch(`${API}/comments`, requestOptions);
       // console.log("uploaded comment");
       // inputRef.current.value = "";
       // const newComments = await Api.getComments();
@@ -104,7 +103,7 @@ export const uploadNewComment = async (photo, newComment, currentUser) => {
 };
 
 export const getLikes = async () => {
-  const url = `http://localhost:8080/likes`;
+  const url = `${API}/likes`;
   try {
     const response = await fetch(url);
     const result = await response.json();
@@ -115,7 +114,7 @@ export const getLikes = async () => {
 };
 
 export const deleteLike = async (likeId) => {
-  const url = `http://localhost:8080/likes/${likeId}`;
+  const url = `${API}/likes/${likeId}`;
   const requestOptions = { method: "DELETE" };
   try {
     await fetch(url, requestOptions);
@@ -125,7 +124,7 @@ export const deleteLike = async (likeId) => {
 };
 
 export const postLike = async (user, photo, userWhoLikedIt) => {
-  const url = `http://localhost:8080/likes`;
+  const url = `${API}/likes`;
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -143,7 +142,7 @@ export const postLike = async (user, photo, userWhoLikedIt) => {
 };
 
 export const getLikeByPhotoAndUserId = async (userId, photoId) => {
-  const url = `http://localhost:8080/likes/${userId}/${photoId}`;
+  const url = `${API}/likes/${userId}/${photoId}`;
   try {
     const response = await fetch(url);
     const result = await response.json();
@@ -154,7 +153,7 @@ export const getLikeByPhotoAndUserId = async (userId, photoId) => {
 };
 
 export const getUsers = async () => {
-  const url = "http://localhost:8080/users";
+  const url = `${API}/users`;
   try {
     const response = await fetch(url);
     const result = await response.json();
@@ -165,7 +164,7 @@ export const getUsers = async () => {
 };
 
 export const getFollows = async () => {
-  const url = `http://localhost:8080/follows`;
+  const url = `${API}/follows`;
   try {
     const response = await fetch(url);
     const result = await response.json();
@@ -176,7 +175,7 @@ export const getFollows = async () => {
 };
 
 export const postFollow = async (user, followingUser) => {
-  const url = `http://localhost:8080/follows`;
+  const url = `${API}/follows`;
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -193,7 +192,7 @@ export const postFollow = async (user, followingUser) => {
 };
 
 export const deleteFollow = async (followId) => {
-  const url = `http://localhost:8080/follows/${followId}`;
+  const url = `${API}/follows/${followId}`;
   const requestOptions = { method: "DELETE" };
   try {
     await fetch(url, requestOptions);
