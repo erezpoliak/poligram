@@ -11,13 +11,17 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
-  const { set_currentUser, set_userProfileDisplay } = useContext(Insta_Context);
+  const { set_currentUser, set_userProfileDisplay, set_users } = useContext(
+    Insta_Context
+  );
 
   const signUp = async () => {
     try {
       const response = await Api.uploadUser(userName, email, password);
       set_currentUser(response);
       set_userProfileDisplay(response);
+      const newUsers = await Api.getUsers();
+      set_users(newUsers);
     } catch (err) {
       alert(err);
     }
