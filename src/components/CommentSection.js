@@ -84,18 +84,14 @@ const CommentSection = ({ photo }) => {
       {getCommentsForPhoto(photo)}
       <br />
       <br />
-      <form style={{ width: "80%" }}>
+      <form>
         <label>Add a comment</label>
         <input
           type="text"
           onChange={(e) => set_newComment(e.target.value)}
           ref={inputRef}
         />
-        <input
-          type="submit"
-          onClick={uploadNewComment(photo)}
-          style={{ width: "80%" }}
-        />
+        <input type="submit" onClick={uploadNewComment(photo)} />
       </form>
     </>
   );
