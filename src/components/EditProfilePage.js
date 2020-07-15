@@ -34,7 +34,8 @@ const EditProfilePage = () => {
 
   const updateProfilePic = async () => {
     setLoading(true);
-    const uploadTask = storage.ref(`images/${generateIdForPhoto()}`).put(photo);
+    const imageName = generateIdForPhoto();
+    const uploadTask = storage.ref(`images/${imageName}`).put(photo);
     uploadTask.on(
       "state_changed",
       () => {},
@@ -42,7 +43,7 @@ const EditProfilePage = () => {
       async () => {
         const url = await storage
           .ref("images")
-          .child(photo.name)
+          .child(photo.imageName)
           .getDownloadURL();
         try {
           const updatedUser = await Api.changeUserProfilePhoto(

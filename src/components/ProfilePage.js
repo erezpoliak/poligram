@@ -93,7 +93,7 @@ const ProfilePage = () => {
           }
         />
         <ProfileStatsWrapper>
-          <div>3</div>
+          <div>{photosForFeed.length}</div>
           <div>Posts</div>
         </ProfileStatsWrapper>
         <ProfileStatsWrapper>
