@@ -131,8 +131,9 @@ export default Feed;
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-around;
   padding: 4vh;
+  /* grid-gap: 3vh; */
   /* background: #37474f;
    */
   background: linear-gradient(#546e7a, #37474f);
@@ -194,9 +195,10 @@ const useStyles = makeStyles((theme) => ({
     height: "60vh",
     width: "20vw",
     overflow: "scroll",
+    margin: "2vh",
     [theme.breakpoints.down(750)]: {
-      height: "40vh",
-      width: "40vw",
+      height: "30vh",
+      width: "30vw",
     },
   },
   btn: {

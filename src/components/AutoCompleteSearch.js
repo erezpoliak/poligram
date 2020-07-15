@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Insta_Context } from "./Context";
 import { useHistory } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 
 export default function AutoCompleteSearch() {
   const { users, set_redirect, set_userProfileDisplay } = useContext(
@@ -10,6 +11,7 @@ export default function AutoCompleteSearch() {
   );
 
   const history = useHistory();
+  const classes = useStyles();
 
   const findUserByUserName = (selectedUser) => {
     const result = users.filter(
@@ -20,6 +22,7 @@ export default function AutoCompleteSearch() {
 
   return (
     <Autocomplete
+      className={classes.searchBox}
       id="combo-box-demo"
       options={users}
       getOptionLabel={(user) => user.userName}
@@ -31,7 +34,6 @@ export default function AutoCompleteSearch() {
           history.push("/profile");
         }
       }}
-      style={{ width: "80%" }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -43,3 +45,12 @@ export default function AutoCompleteSearch() {
     />
   );
 }
+
+const useStyles = makeStyles({
+  searchBox: {
+    width: "80%",
+    "& .MuiFormLabel-root": {
+      color: "#757575",
+    },
+  },
+});
