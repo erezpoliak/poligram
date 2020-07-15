@@ -49,16 +49,12 @@ const Post = () => {
     );
   };
 
-  console.log("user fromn uploadPage");
-  console.log(currentUser);
-
   return (
     <Grid>
       <HomeTopBar />
       <InputContainer>
         <UploadBtn />
         {photo && <img src={preview} width="300px" height="300px" />}
-        {/* {photo && <img src={preview} width="200vh" height="200vh" />} */}
         <TextField
           label="Title"
           variant="outlined"

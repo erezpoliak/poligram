@@ -69,7 +69,6 @@ export async function deletePhotoByPhotoId(photoId) {
       method: "DELETE",
     };
     const response = await fetch(url, requestOptions);
-    console.log("response from deletePghotoByPhotoId bla bla");
   } catch (err) {
     console.log(err);
   }
@@ -261,7 +260,9 @@ export const changeUserProfilePhoto = async (photoUrl, userId) => {
     }),
   };
   try {
-    await fetch(url, requestOptions);
+    const response = await fetch(url, requestOptions);
+    const result = await response.json();
+    return result;
   } catch (err) {
     console.log(err);
   }
@@ -277,7 +278,9 @@ export const changeUserBio = async (bio, userId) => {
     }),
   };
   try {
-    await fetch(url, requestOptions);
+    const response = await fetch(url, requestOptions);
+    const result = await response.json();
+    return result;
   } catch (err) {
     console.log(err);
   }

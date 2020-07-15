@@ -12,9 +12,14 @@ import * as Api from "./Api";
 const EditProfilePage = () => {
   const [editPic, set_editPic] = useState(false);
   const [editBio, set_editBio] = useState(false);
-  const { photo, set_photo, currentUser, set_currentUser } = useContext(
-    Insta_Context
-  );
+  const {
+    photo,
+    set_photo,
+    currentUser,
+    set_currentUser,
+    set_userProfileDisplay,
+    set_users,
+  } = useContext(Insta_Context);
   const [preview, setPreview] = useState("");
   const [bio, setBio] = useState("");
 
@@ -36,26 +41,16 @@ const EditProfilePage = () => {
           .ref("images")
           .child(photo.name)
           .getDownloadURL();
-        // const requestOptions = {
-        //   method: "PATCH",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({
-        //     profilePhoto: url,
-        //   }),
-        // };
         try {
-          // await fetch(
-          //   `http://localhost:8080/users/${currentUser._id}`,
-          //   requestOptions
-          // );
-          // const updatedUser = await fetch(
-          //   `http://localhost:8080/users/${currentUser.email}`
-          // );
-          await Api.changeUserProfilePhoto(url, currentUser._id);
-          const updatedUser = await Api.getUserByEmail(currentUser.email);
-          alert("succesfully updated photo!");
+          const updatedUser = await Api.changeUserProfilePhoto(
+            url,
+            currentUser._id
+          );
           set_photo("");
           set_currentUser(updatedUser);
+          const newUsers = await Api.getUsers();
+          set_users(newUsers);
+          alert("succesfully updated photo!");
         } catch (err) {
           console.log(err);
           alert("failed to upload photo");
@@ -65,28 +60,15 @@ const EditProfilePage = () => {
   };
 
   const updateBio = async () => {
-    // const requestOptions = {
-    //   method: "PATCH",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     bio: bio,
-    //   }),
-    // };
     try {
-      // await fetch(
-      //   `http://localhost:8080/users/${currentUser._id}`,
-      //   requestOptions
-      // );
-      // const updatedUser = await fetch(
-      //   `http://localhost:8080/users/${currentUser.email}`
-      // );
-      // const userJson = await updatedUser.json();
-      await Api.changeUserBio(bio, currentUser._id);
-      const updatedUser = Api.getUserByEmail(currentUser.email);
+      const updatedUser = await Api.changeUserBio(bio, currentUser._id);
       set_currentUser(updatedUser);
+      const newUsers = await Api.getUsers();
+      set_users(newUsers);
       alert("succesfully updated bio!");
     } catch (err) {
       console.log(err);
+      alert("failed to update bio");
     }
   };
 

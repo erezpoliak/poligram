@@ -23,8 +23,6 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const getPhotosForFeed = () => {
-      console.log("userDisplay from autoComplete from useEffect");
-      console.log(userProfileDisplay);
       const result = photos.filter(
         (photo) => photo.user._id === userProfileDisplay._id
       );
@@ -32,18 +30,12 @@ const ProfilePage = () => {
     };
     const filteredPhotos = getPhotosForFeed();
     set_photosForFeed(filteredPhotos);
-    // set_userToShow(userProfileDisplay);
   }, [userProfileDisplay, photos]);
-
-  console.log("userDisplay from autoComplete");
-  console.log(userProfileDisplay);
 
   const checkIfFollow = () => {
     const ifFollow = follows.filter(
       (follow) => follow.followingUser._id === currentUser._id
     );
-    console.log("if follow array is");
-    console.log(ifFollow);
     if (ifFollow.length === 0) return false;
     else return true;
   };
@@ -64,8 +56,6 @@ const ProfilePage = () => {
       set_follows(newFollows);
     } else {
       const follow = getFollowId(currentUser._id, userProfileDisplay._id);
-      console.log("follow from changeFollow fn");
-      console.log(follow);
       await Api.deleteFollow(follow);
       const newFollows = await Api.getFollows();
       set_follows(newFollows);
@@ -85,6 +75,11 @@ const ProfilePage = () => {
     );
     return selectedFollows.length;
   };
+
+  console.log("userProfileDisplay from profile");
+  console.log(userProfileDisplay);
+  console.log("current User from profile");
+  console.log(currentUser);
 
   return (
     <Grid>
@@ -119,7 +114,6 @@ const ProfilePage = () => {
       currentUser._id !== userProfileDisplay._id ? (
         <Button
           variant="contained"
-          // color={checkIfFollow() ? "primary" : "default"}
           color="primary"
           style={{ width: "23%", postion: "relative", left: "70%" }}
           onClick={() => changeFollow()}
@@ -165,13 +159,6 @@ const ProfilePic = styled.img`
   width: 100%;
   height: 100%;
 `;
-
-// const ProfileName = styled.h1`
-//   /* color: black; */
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
 
 const ProfileStatsWrapper = styled.div`
   display: flex;

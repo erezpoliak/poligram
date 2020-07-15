@@ -18,10 +18,9 @@ const App = () => {
     currentUser,
     redirect,
     set_userProfileDisplay,
+    userProfileDisplay,
   } = useContext(Insta_Context);
   const [email, setEmail] = useState("");
-  const [usersApi, set_usersApi] = useState({});
-  const [msgsApi, set_msgsApi] = useState({});
 
   useEffect(() => {
     authListener();
@@ -36,9 +35,6 @@ const App = () => {
 
   const authListener = () => {
     fire.auth().onAuthStateChanged((currentUser) => {
-      console.log("currentUser from auth ");
-      console.log(currentUser);
-
       // console.log(user === null);
 
       // if (user) {
@@ -46,7 +42,6 @@ const App = () => {
       //   setEmail(userObj.email);
       // }
       if (currentUser) {
-        console.log("current user email " + currentUser.email);
         setEmail(currentUser.email);
       } else {
         set_currentUser(null);
@@ -55,28 +50,22 @@ const App = () => {
   };
 
   const fetchCurrentUser = async () => {
+    console.log("im inside fetch current User from app");
     if (email !== "") {
-      console.log("email from fn app" + email);
       const response = await Api.getUserByEmail(email);
-      if (response !== "") {
-        console.log("current user from fetchCurrentUser");
-        console.log(response);
+      if (response) {
         set_currentUser(response);
         set_userProfileDisplay(response);
-      } else set_currentUser();
-    } else console.log("emnail is empty");
+      }
+    } else set_currentUser();
   };
 
-  console.log("current user from app.js");
-  console.log(currentUser);
-
-  console.log("email fromn app");
-  console.log(email);
-
-  console.log(`users api`);
-  console.log(usersApi);
-  console.log(`msgs api`);
-  console.log(msgsApi);
+  if (currentUser) {
+    console.log("currentUser email value from app");
+    console.log(currentUser.email);
+    console.log("current User from app");
+    console.log(currentUser);
+  }
 
   return (
     <Router>
@@ -87,8 +76,6 @@ const App = () => {
       <Route path="/upload" component={UploadPage} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/edit-profile" component={EditProfilePage} />
-
-      {/* {user ? <Home /> : <Login />} */}
       {currentUser ? <Redirect to={"/home"} /> : <Redirect to="/login" />}
     </Router>
   );

@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { storage } from "./config/Fire";
 
 const UploadBtn = () => {
-  // const [upload, set_upload] = useState();
   const { set_photo } = useContext(Insta_Context);
 
   const saveImg = (e) => {

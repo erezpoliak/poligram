@@ -23,7 +23,6 @@ const Feed = ({ photosForFeed }) => {
   const classes = useStyles();
 
   const deletePhoto = async (photoId) => {
-    console.log(photoId);
     await Api.deletePhotoByPhotoId(photoId);
     const newPhotos = await Api.getPhotos();
     set_photos(newPhotos);
@@ -35,13 +34,9 @@ const Feed = ({ photosForFeed }) => {
         like.photo._id === photo._id &&
         like.userWhoLikedIt._id === currentUser._id
     );
-    console.log("is array of likes is array");
-    console.log(Array.isArray(like));
     if (like.length === 0) {
-      console.log("it is false");
       return false;
     } else {
-      console.log("it is true");
       return true;
     }
   };
@@ -54,10 +49,8 @@ const Feed = ({ photosForFeed }) => {
   };
 
   const changeLike = async (photo) => {
-    console.log("went inside changeLike fn");
     const isLiked = checkIfLiked(photo);
     if (isLiked) {
-      console.log("fn changelike got true from isliked fn");
       const like = await Api.getLikeByPhotoAndUserId(
         currentUser._id,
         photo._id
@@ -68,7 +61,6 @@ const Feed = ({ photosForFeed }) => {
       const newLikes = await Api.getLikes();
       set_likes(newLikes);
     } else {
-      console.log("fn changelike got false from isliked fn");
       await Api.postLike(photo.user, photo, currentUser);
       const newLikes = await Api.getLikes();
       set_likes(newLikes);

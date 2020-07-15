@@ -29,10 +29,6 @@ const SignUp = () => {
     }
   };
 
-  console.log(`email from signup ${email}`);
-  console.log(`pass from signup ${password}`);
-  console.log("username from" + userName);
-
   return (
     <Grid>
       <TopBar>
@@ -134,9 +130,3 @@ const SigninLink = styled(Link)`
   color: rgba(0, 0, 0, 0.87);
   font-size: 1.1rem;
 `;
-
-// const Name = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(2, 1fr);
-//   grid-gap: 3%;
-// `;

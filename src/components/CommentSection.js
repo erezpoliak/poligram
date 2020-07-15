@@ -20,7 +20,6 @@ const CommentSection = ({ photo }) => {
         comment.user._id === currentUser._id ||
         comment.commentedUser._id === currentUser._id
       ) {
-        console.log(comment.commentedUser);
         return (
           <CommentWrapper>
             <FlexWrapper>

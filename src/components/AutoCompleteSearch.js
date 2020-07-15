@@ -24,28 +24,13 @@ export default function AutoCompleteSearch() {
       options={users}
       getOptionLabel={(user) => user.userName}
       selectOnFocus={true}
-      // onChange={(value) => set_redirect(`/${value}`)}
       onChange={(e, value, reason) => {
         if (value) {
           const user = findUserByUserName(value);
-          console.log("user from autoComplete");
-          console.log(user);
           set_userProfileDisplay(user[0]);
           history.push("/profile");
-          // set_redirect("/profile");
-          // return <Redirect to="/profile" />;
         }
       }}
-      // renderOption={(users) => {
-      //   users.map((user) => {
-      //     return (
-      //       <>
-      //         <img src={user.profilePhoto} />
-      //         <TextField>{user.userName}</TextField>
-      //       </>
-      //     );
-      //   });
-      // }}
       style={{ width: "80%" }}
       renderInput={(params) => (
         <TextField
