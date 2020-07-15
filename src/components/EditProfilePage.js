@@ -35,6 +35,8 @@ const EditProfilePage = () => {
   const updateProfilePic = async () => {
     setLoading(true);
     const imageName = generateIdForPhoto();
+    // const photo.ending = photo.split('.');
+    // console.log("image Name is " + imageName);
     const uploadTask = storage.ref(`images/${imageName}`).put(photo);
     uploadTask.on(
       "state_changed",
@@ -43,7 +45,7 @@ const EditProfilePage = () => {
       async () => {
         const url = await storage
           .ref("images")
-          .child(photo.imageName)
+          .child(`${imageName}`)
           .getDownloadURL();
         try {
           const updatedUser = await Api.changeUserProfilePhoto(
@@ -89,10 +91,9 @@ const EditProfilePage = () => {
 
   const generateIdForPhoto = () => {
     let result = "";
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     const charactersLength = characters.length;
-    for (let i = 0; i < charactersLength; i++) {
+    for (let i = 0; i < 13; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
