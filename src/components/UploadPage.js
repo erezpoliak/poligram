@@ -8,12 +8,16 @@ import Button from "@material-ui/core/Button";
 import { storage } from "./config/Fire";
 import { Link } from "react-router-dom";
 import * as Api from "./Api";
+import Spinner from "./Spinner";
+import { useHistory } from "react-router-dom";
 
 const Post = () => {
   const { photo, set_photo, set_photos } = useContext(Insta_Context);
   const [title, set_title] = useState("");
   const [preview, setPreview] = useState("");
   const { currentUser } = useContext(Insta_Context);
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (photo) {
@@ -23,6 +27,7 @@ const Post = () => {
   }, [photo]);
 
   const post = async () => {
+    setLoading(true);
     const uploadTask = storage.ref(`images/${generateIdForPhoto()}`).put(photo);
     uploadTask.on(
       "state_changed",
@@ -38,10 +43,12 @@ const Post = () => {
         try {
           await Api.postPhoto(url, title, currentUser);
           console.log("successfully uploaded post");
-          alert("successfully uploaded post");
+          setLoading(false);
+          // alert("successfully uploaded post");
           set_photo();
           const newPhotos = await Api.getPhotos();
           set_photos(newPhotos);
+          history.push("/home");
         } catch (err) {
           console.log(err);
         }
@@ -54,7 +61,7 @@ const Post = () => {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < charactersLength; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
@@ -71,16 +78,17 @@ const Post = () => {
           variant="outlined"
           onChange={(e) => set_title(e.target.value)}
         />
-        <HomeLink to="/home">
-          <Button
-            variant="contained"
-            color="primary"
-            component="span"
-            onClick={post}
-          >
-            Post!
-          </Button>
-        </HomeLink>
+        {/* <HomeLink to="/home"> */}
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          onClick={post}
+        >
+          Post!
+        </Button>
+        {loading ? <Spinner /> : ""}
+        {/* </HomeLink> */}
       </InputContainer>
     </Grid>
   );

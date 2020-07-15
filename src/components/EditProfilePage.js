@@ -8,6 +8,7 @@ import { storage } from "./config/Fire";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import * as Api from "./Api";
+import Spinner from "./Spinner";
 
 const EditProfilePage = () => {
   const [editPic, set_editPic] = useState(false);
@@ -22,6 +23,7 @@ const EditProfilePage = () => {
   } = useContext(Insta_Context);
   const [preview, setPreview] = useState("");
   const [bio, setBio] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (photo) {
@@ -31,6 +33,7 @@ const EditProfilePage = () => {
   }, [photo]);
 
   const updateProfilePic = async () => {
+    setLoading(true);
     const uploadTask = storage.ref(`images/${generateIdForPhoto()}`).put(photo);
     uploadTask.on(
       "state_changed",
@@ -50,6 +53,7 @@ const EditProfilePage = () => {
           set_currentUser(updatedUser);
           const newUsers = await Api.getUsers();
           set_users(newUsers);
+          setLoading(false);
           alert("succesfully updated photo!");
         } catch (err) {
           console.log(err);
@@ -87,7 +91,7 @@ const EditProfilePage = () => {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < charactersLength; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
@@ -149,6 +153,10 @@ const EditProfilePage = () => {
               >
                 Update Profile pic!
               </Button>
+              <br />
+              <br />
+              <br />
+              {loading ? <Spinner /> : ""}
             </>
           ) : (
             ""
