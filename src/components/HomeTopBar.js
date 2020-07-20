@@ -57,9 +57,9 @@ const HomeTopBar = () => {
           <HomeIcon size="large" />
         </FlexWrapper>
         {/* </HomeWrapper> */}
-        <NotificationWrapper>
+        <FlexWrapper>
           <NotificationsIcon size="large" />
-        </NotificationWrapper>
+        </FlexWrapper>
         {/* <AccountCircle size= 'large'/> */}
         <AccountMenu />
       </IconWrapper>
