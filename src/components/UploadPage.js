@@ -49,7 +49,7 @@ const Post = () => {
           set_photo();
           const newPhotos = await Api.getPhotos();
           set_photos(newPhotos);
-          history.push("/home");
+          history.push("/profile");
         } catch (err) {
           console.log(err);
         }
