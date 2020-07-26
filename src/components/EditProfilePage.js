@@ -122,48 +122,47 @@ const EditProfilePage = () => {
           </Button>
         </SideBar>
         <Divider orientation="vertical" />
-        <Content>
-          {editBio ? (
-            <>
-              <TextField
-                variant="outlined"
-                onChange={(e) => setBio(e.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                onClick={updateBio}
-              >
-                Update Bio!
-              </Button>
-            </>
-          ) : (
-            ""
-          )}
-          {editPic ? (
-            <>
-              <UploadBtn />
-              <PicPreview>
-                <img src={preview} width="300px" height="300px" />
-              </PicPreview>
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                onClick={updateProfilePic}
-              >
-                Update Profile pic!
-              </Button>
-              <br />
-              <br />
-              <br />
-              {loading ? <Spinner /> : ""}
-            </>
-          ) : (
-            ""
-          )}
-        </Content>
+        {editBio ? (
+          <BioContainer>
+            <TextField
+              variant="outlined"
+              onChange={(e) => setBio(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              component="span"
+              onClick={updateBio}
+              style={{ marginTop: "2vh" }}
+            >
+              Update Bio!
+            </Button>
+          </BioContainer>
+        ) : (
+          ""
+        )}
+        {editPic ? (
+          <UpdatePicContainer>
+            <UploadBtn />
+            <PreviewContainer>
+              {photo && <PicPreview src={preview} />}
+            </PreviewContainer>
+            <Button
+              variant="contained"
+              color="primary"
+              component="span"
+              onClick={updateProfilePic}
+            >
+              Update Profile pic!
+            </Button>
+            <br />
+            <br />
+            <br />
+            {loading ? <Spinner /> : ""}
+          </UpdatePicContainer>
+        ) : (
+          ""
+        )}
       </Grid>
     </>
   );
@@ -178,7 +177,7 @@ const Grid = styled.div`
   height: 88vh;
 `;
 
-const PicPreview = styled.div`
+const PreviewContainer = styled.div`
   /* width: 300px;
   height: 300px; */
   display: flex;
@@ -197,4 +196,27 @@ const Content = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`;
+
+const BioContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const UpdatePicContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+`;
+
+const PicPreview = styled.img`
+  width: 300px;
+  height: 300px;
+  @media (max-width: 750px) {
+    width: 150px;
+    width: 150px;
+  }
 `;
