@@ -196,9 +196,12 @@ const useStyles = makeStyles((theme) => ({
     width: "20vw",
     overflow: "scroll",
     margin: "2vh",
+    "& .MuiCardContent-root": {
+      padding: "2vh 1vh 2vh 1vh",
+    },
     [theme.breakpoints.down(750)]: {
       height: "30vh",
-      width: "30vw",
+      width: "45vw",
     },
   },
   btn: {
@@ -206,5 +209,9 @@ const useStyles = makeStyles((theme) => ({
     left: "70%",
     height: "100%",
     width: "30%",
+    minWidth: "0",
+    [theme.breakpoints.down(750)]: {
+      padding: "0",
+    },
   },
 }));

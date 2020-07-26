@@ -22,7 +22,7 @@ const CommentSection = ({ photo }) => {
       ) {
         return (
           <CommentWrapper>
-            <FlexWrapper>
+            <ProfilePicWrapper>
               <ProfilePhoto
                 src={
                   comment && comment.commentedUser
@@ -31,7 +31,7 @@ const CommentSection = ({ photo }) => {
                 }
                 display={comment.commentedUser.profilePhoto}
               />
-            </FlexWrapper>
+            </ProfilePicWrapper>
             <div style={{ fontWeight: "900", wordBreak: "break-word" }}>
               {comment.commentedUser.userName}
             </div>
@@ -55,7 +55,7 @@ const CommentSection = ({ photo }) => {
                 display={comment.commentedUser.profilePhoto}
               />
             </FlexWrapper>
-            <div style={{ fontWeight: "900", wordBreak: "break-word" }}>
+            <div style={{ fontWeight: "700", wordBreak: "break-word" }}>
               {comment.commentedUser.userName}
             </div>
             <div>{comment.comment}</div>
@@ -90,6 +90,7 @@ const CommentSection = ({ photo }) => {
           type="text"
           onChange={(e) => set_newComment(e.target.value)}
           ref={inputRef}
+          style={{ width: "100%" }}
         />
         <input type="submit" onClick={uploadNewComment(photo)} />
       </form>
@@ -112,6 +113,9 @@ const CommentWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   padding-top: 2.5vh;
+  @media (max-width: 750px) {
+    font-size: 1vh;
+  }
 `;
 
 const ProfilePhoto = styled.img`
@@ -122,10 +126,19 @@ const ProfilePhoto = styled.img`
   display: ${(props) => (props.display ? "block" : "none")};
 `;
 
-const useStyles = makeStyles({
+const ProfilePicWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const useStyles = makeStyles((theme) => ({
   btn: {
     // height: "100%",
     width: "100%",
     minWidth: "0",
+    [theme.breakpoints.down(750)]: {
+      padding: "0",
+    },
   },
-});
+}));
