@@ -27,7 +27,7 @@ const Login = () => {
     <Grid>
       <TopBar>
         <Title>Poligram</Title>
-        <About>About</About>
+        <About to="/about">About</About>
       </TopBar>
       <FlexWrapper>
         <Content>
@@ -86,10 +86,12 @@ const Title = styled.h1`
   padding-left: 7%;
 `;
 
-const About = styled.div`
+const About = styled(Link)`
   display: flex;
   align-items: center;
   font-size: 1.1rem;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const Content = styled.div`

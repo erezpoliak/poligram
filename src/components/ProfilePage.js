@@ -93,15 +93,15 @@ const ProfilePage = () => {
           }
         />
         <ProfileStatsWrapper>
-          <div>{photosForFeed.length}</div>
+          <StatsNum>{photosForFeed.length}</StatsNum>
           <div>Posts</div>
         </ProfileStatsWrapper>
         <ProfileStatsWrapper>
-          <div>{getFollowers()}</div>
+          <StatsNum>{getFollowers()}</StatsNum>
           <div>Followers</div>
         </ProfileStatsWrapper>
         <ProfileStatsWrapper>
-          <div>{getFollowing()}</div>
+          <StatsNum>{getFollowing()}</StatsNum>
           <div>Following</div>
         </ProfileStatsWrapper>
       </Profile>
@@ -168,6 +168,7 @@ const ProfileStatsWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 1.8vh;
 `;
 
 const Bio = styled.div`
@@ -189,4 +190,9 @@ const FlexWrapper = styled.div`
   justify-content: center;
   align-items: center;
   color: red;
+`;
+
+const StatsNum = styled.div`
+  font-weight: 900;
+  margin-bottom: 1vh;
 `;

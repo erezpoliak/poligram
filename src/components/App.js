@@ -10,6 +10,7 @@ import { Insta_Context } from "./Context";
 import ProfilePage from "./ProfilePage";
 import EditProfilePage from "./EditProfilePage";
 import * as Api from "./Api";
+import About from "./About";
 
 const App = () => {
   // const [user, setUser] = useState({});
@@ -76,6 +77,7 @@ const App = () => {
       <Route path="/upload" component={UploadPage} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/edit-profile" component={EditProfilePage} />
+      <Route path="/about" component={About} />
       {currentUser ? <Redirect to={"/home"} /> : <Redirect to="/login" />}
     </Router>
   );
