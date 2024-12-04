@@ -33,6 +33,15 @@ const About = () => {
             style={{ fontSize: "9.5vh", margin: "2vw", color: "211F1F" }}
           />
         </LinkWrapper>
+        <CodeLinksContainer>
+          Check out my code!
+          <CodeLink href="https://github.com/erezpoliak/poligram">
+            Frontend repo
+          </CodeLink>
+          <CodeLink href="https://github.com/erezpoliak/poli_backend">
+            Backend repo
+          </CodeLink>
+        </CodeLinksContainer>
       </Links>
     </Grid>
   );
@@ -81,4 +90,13 @@ const BackToLoginLink = styled(Link)`
 const LinkWrapper = styled.a`
   text-decoration: none;
   color: inherit;
+`;
+
+const CodeLink = styled.a`
+  text-decoration: none;
+  color: inherit;
+`;
+
+const CodeLinksContainer = styled.h1`
+  flex-basis: 100%;
 `;

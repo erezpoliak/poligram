@@ -1,5 +1,6 @@
-const API = process.env.REACT_APP_API_URL;
+// const API = process.env.REACT_APP_API_URL;
 // const API = "https://poligram-backend.herokuapp.com";
+const API = "https://poligram-backend.netlify.app/";
 
 export async function getPhotos() {
   try {
