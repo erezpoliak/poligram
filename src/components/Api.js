@@ -1,5 +1,5 @@
 // const API = process.env.REACT_APP_API_URL;
-const API = "https://poli-backend.onrender.com/";
+const API = "https://poli-backend.onrender.com";
 
 export async function getPhotos() {
   try {
